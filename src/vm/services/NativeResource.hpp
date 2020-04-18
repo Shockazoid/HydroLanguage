@@ -21,7 +21,7 @@
 
 #include "../../system/HObject.hpp"
 #include "../../utility/classhelper.hpp"
-#include "../VMObject.hpp"
+#include "../VM_Object.hpp"
 #include "../glue.hpp"
 #include "../ClassAllocator.hpp"
 

@@ -14,14 +14,14 @@
 #ifndef __h3o_EventParam__
 #define __h3o_EventParam__
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "TypeSpecifier.hpp"
 #include "InstrGroup.hpp"
 
 namespace hydro
 {
 
-struct EventParam : public VMObject
+struct EventParam : public VM_Object
 {
     TypeSpecifier *type;
     InstrGroup *defaultValue;

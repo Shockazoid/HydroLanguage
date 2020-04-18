@@ -25,7 +25,7 @@ ClassNode::~ClassNode() {}
 void ClassNode::build(Chunk *chunk)
 {
     _vclass->nfields = (uint16_t)_fields.size();
-    _vclass->fields = new VMObject*[_vclass->nfields];
+    _vclass->fields = new VM_Object*[_vclass->nfields];
     _vclass->ninstance = 0;
     _vclass->nstatic = 0;
     

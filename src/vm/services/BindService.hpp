@@ -32,7 +32,7 @@ namespace hydro
 struct BindService : RuntimeService
 {
 private:
-    Closure *createClosure(const VMObject *data) const;
+    Closure *createClosure(const VM_Object *data) const;
 
 public:
     BindService(HvmEnv *env) : RuntimeService{env} {}

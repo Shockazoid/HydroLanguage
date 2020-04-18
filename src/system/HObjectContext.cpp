@@ -83,7 +83,7 @@ void HObjectContext::setup()
         
         for(j = 0; j < vclass->nfields; j++)
         {
-            VMObject *data = vclass->fields[i];
+            VM_Object *data = vclass->fields[i];
             
             // property?
             if(VM_Property *prop = dynamic_cast<VM_Property *>(data))

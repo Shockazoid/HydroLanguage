@@ -11,16 +11,16 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_VMContextData__
-#define __h3o_VMContextData__
+#ifndef __h3o_ContextData__
+#define __h3o_ContextData__
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "EventParam.hpp"
 
 namespace hydro
 {
 
-struct ContextData : public VMObject
+struct ContextData : public VM_Object
 {
     ContextData *base;
     uint16_t nparams;
@@ -29,4 +29,4 @@ struct ContextData : public VMObject
 
 } // namespace hydro
 
-#endif /* __h3o_VMContextData__ */
+#endif /* __h3o_ContextData__ */

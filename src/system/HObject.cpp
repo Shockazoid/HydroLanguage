@@ -15,7 +15,7 @@
 #include "HClass.hpp"
 #include "HObjectContext.hpp"
 #include "../vm/HvmEnv.hpp"
-#include "../vm/VMObject.hpp"
+#include "../vm/VM_Object.hpp"
 #include "../memory/object_ptr.hpp"
 
 namespace hydro

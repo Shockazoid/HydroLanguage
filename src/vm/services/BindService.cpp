@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-Closure *BindService::createClosure(const VMObject *data) const
+Closure *BindService::createClosure(const VM_Object *data) const
 {
     Closure *closure = new Closure{};
     closure->data = data;

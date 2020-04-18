@@ -24,7 +24,7 @@ namespace hydro
 struct Closure
 {
 	const Closure *parent;
-	const VMObject *data;
+	const VM_Object *data;
 	//Upvalue **upvalues;
     MemorySpace *locals;
 	uint8_t nups; // number of upvalues

@@ -17,13 +17,13 @@
 #include <string>
 #include <cstdlib>
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "TypeSpecifier.hpp"
 
 namespace hydro
 {
 
-struct LocalVar : public VMObject
+struct LocalVar : public VM_Object
 {
 	TypeSpecifier *type{nullptr};
 	virtual ~LocalVar() {}

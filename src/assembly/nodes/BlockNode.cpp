@@ -27,12 +27,12 @@ BlockNode::~BlockNode()
 	_upvalues.clear();
 }
 
-void BlockNode::addSlot(VMObject *data)
+void BlockNode::addSlot(VM_Object *data)
 {
 	_slots.push_back(data);
 }
 
-void BlockNode::addUpvalue(VMObject *data)
+void BlockNode::addUpvalue(VM_Object *data)
 {
 	_slots.push_back(data);
 	_upvalues.push_back(data);

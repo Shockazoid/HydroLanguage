@@ -11,21 +11,21 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_VMObject__
-#define __h3o_VMObject__
+#ifndef __h3o_VM_Object__
+#define __h3o_VM_Object__
 
 #include <string>
 
 namespace hydro
 {
 
-struct VMObject
+struct VM_Object
 {
 	uint16_t modifier;
 	std::string name;
-	virtual ~VMObject() {}
+	virtual ~VM_Object() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_VMObject__ */
+#endif /* __h3o_VM_Object__ */

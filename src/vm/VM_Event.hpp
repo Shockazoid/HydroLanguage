@@ -14,7 +14,7 @@
 #ifndef __h3o_VM_Event__
 #define __h3o_VM_Event__
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "VM_Member.hpp"
 #include "VM_Etype.hpp"
 #include "EventParam.hpp"
@@ -22,7 +22,7 @@
 namespace hydro
 {
 
-struct VM_Event : public VMObject
+struct VM_Event : public VM_Object
 {
     const VM_Event *base;
 	VM_Etype **etypes;

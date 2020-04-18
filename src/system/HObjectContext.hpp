@@ -23,7 +23,7 @@
 #include "../memory/object_ptr.hpp"
 #include "../vm/modifiers.hpp"
 #include "../vm/hvalue.hpp"
-#include "../vm/VMObject.hpp"
+#include "../vm/VM_Object.hpp"
 #include "../vm/VMContext.hpp"
 
 namespace hydro
@@ -53,7 +53,7 @@ class HObjectContext final
 private:
 	struct property_space
 	{
-		const VMObject *data;
+		const VM_Object *data;
 		std::string key;
 		hvalue value;
 		bool dynamic;

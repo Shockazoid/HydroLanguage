@@ -66,7 +66,7 @@ void MemorySpace::resize(uint32_t newSize)
 	// TODO resize
 }
 
-void MemorySpace::define(const VMObject *data, hvalue value)
+void MemorySpace::define(const VM_Object *data, hvalue value)
 {
 	for (uint32_t i = 0; i < _size; i++)
 	{

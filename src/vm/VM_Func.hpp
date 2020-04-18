@@ -19,21 +19,21 @@
 
 #include "Chunk.hpp"
 #include "FuncArg.hpp"
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "MemorySpace.hpp"
 #include "ErrorHandler.hpp"
 
 namespace hydro
 {
 
-struct VM_Func : public VMObject
+struct VM_Func : public VM_Object
 {
 	Chunk *chunk{nullptr};
 	std::string package{};
 	int32_t nargs{0}; // arity
 	uint32_t nlocals{0};
 	FuncArg **args;
-	VMObject **locals;
+	VM_Object **locals;
 	uint32_t startAddr{0};
 	uint32_t endAddr{0};
 	uint32_t upvalues{0}; // upvalue count

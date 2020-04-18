@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "H3oNode.hpp"
-#include "../../vm/VMObject.hpp"
+#include "../../vm/VM_Object.hpp"
 
 namespace hydro
 {
@@ -25,15 +25,15 @@ namespace hydro
 class BlockNode : public H3oNode
 {
 protected:
-	std::vector<VMObject *> _slots;
-	std::vector<VMObject *> _upvalues;
+	std::vector<VM_Object *> _slots;
+	std::vector<VM_Object *> _upvalues;
 	std::vector<H3oNode *> _nodes;
 
 public:
 	BlockNode();
 	virtual ~BlockNode();
-	virtual void addSlot(VMObject *var);
-	virtual void addUpvalue(VMObject *var);
+	virtual void addSlot(VM_Object *var);
+	virtual void addUpvalue(VM_Object *var);
 	virtual void build(Chunk *chunk) override;
 	void append(H3oNode *node);
 	void appendFront(H3oNode *node);

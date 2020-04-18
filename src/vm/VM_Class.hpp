@@ -17,21 +17,21 @@
 #include <string>
 #include <cstdlib>
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "Chunk.hpp"
 #include "VM_Member.hpp"
 
 namespace hydro
 {
 
-struct VM_Class : public VMObject
+struct VM_Class : public VM_Object
 {
     Chunk *chunk;
 	const VM_Class *base{nullptr};
 	uint16_t nfields;
     uint16_t nstatic;
 	uint16_t ninstance;
-	VMObject **fields;
+	VM_Object **fields;
 	struct VM_Constructor *construct;
 	virtual ~VM_Class() {}
 };

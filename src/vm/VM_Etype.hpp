@@ -14,12 +14,12 @@
 #ifndef __h3o_VM_Etype__
 #define __h3o_VM_Etype__
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 
 namespace hydro
 {
 
-struct VM_Etype : VMObject
+struct VM_Etype : VM_Object
 {
     struct VM_Event *owner;
 };

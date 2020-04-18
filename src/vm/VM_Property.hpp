@@ -17,7 +17,7 @@
 #include <string>
 #include <cstdlib>
 
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "VM_Member.hpp"
 #include "TypeSpecifier.hpp"
 #include "VM_Getter.hpp"
@@ -26,7 +26,7 @@
 namespace hydro
 {
 
-struct VM_Property : public VMObject, public VM_Member
+struct VM_Property : public VM_Object, public VM_Member
 {
 	std::string name{""};
 	TypeSpecifier *type{nullptr};

@@ -15,7 +15,7 @@
 #define __h3o_Value__
 
 #include "hvalue.hpp"
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 
 namespace hydro
 {
@@ -23,7 +23,7 @@ namespace hydro
 struct Value
 {
 	std::string name{""};
-	const VMObject *data{nullptr};
+	const VM_Object *data{nullptr};
 	hvalue content{undefined};
 	bool dynamic{false};
 };

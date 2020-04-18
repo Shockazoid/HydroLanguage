@@ -25,8 +25,8 @@ class InstrGroupNode : public BlockNode
 {
 protected:
 	InstrGroup *_group;
-	std::vector<VMObject *> _slots;
-	std::vector<VMObject *> _upvalues;
+	std::vector<VM_Object *> _slots;
+	std::vector<VM_Object *> _upvalues;
 
 public:
 	bool returnsValue{false};

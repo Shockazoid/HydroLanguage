@@ -59,7 +59,7 @@ void FuncNode::build(Chunk *chunk)
 	_func->nargs = (uint32_t)_args.size();
 	_func->nlocals = (uint32_t)_slots.size();
 	_func->args = new FuncArg *[_func->nargs];
-	_func->locals = new VMObject *[_func->nlocals];
+	_func->locals = new VM_Object *[_func->nlocals];
     
 	uint32_t i = 0;
 
@@ -73,7 +73,7 @@ void FuncNode::build(Chunk *chunk)
 	i = 0;
 
 	// populate locals list
-	for (VMObject *loc : _slots)
+	for (VM_Object *loc : _slots)
 		_func->locals[i++] = loc;
 
 	// emit function body

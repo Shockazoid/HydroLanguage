@@ -28,7 +28,7 @@ void SetService::globalFn(std::string name, function_glue *glue) const
     vfunc->returnType = new NilTypeSpecifier{};
     vfunc->nargs = 0;
     vfunc->nlocals = 0;
-    vfunc->locals = new VMObject *[0];
+    vfunc->locals = new VM_Object *[0];
     vfunc->chunk = nullptr;
     vfunc->nativeBound = true;
     vfunc->nhandlers = 0;

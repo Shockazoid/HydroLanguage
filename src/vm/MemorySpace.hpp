@@ -17,7 +17,7 @@
 #include <cstdlib>
 
 #include "hvalue.hpp"
-#include "VMObject.hpp"
+#include "VM_Object.hpp"
 #include "Value.hpp"
 #include "LocalVar.hpp"
 #include "VM_Func.hpp"
@@ -39,7 +39,7 @@ public:
 	MemorySpace(MemorySpace *parent = nullptr);
 	MemorySpace(const VM_Func *data, MemorySpace *parent = nullptr);
 	~MemorySpace();
-	void define(const VMObject *data, hvalue value = undefined);
+	void define(const VM_Object *data, hvalue value = undefined);
 	bool exists(std::string name) const;
 	bool get(std::string name, hvalue &value); // dynamic load
 	bool set(std::string name, hvalue value);  // dynamic storage
