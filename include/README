@@ -1,0 +1,15 @@
+
+               __  __            __
+              / / / /__  __ ____/ /_____ ____
+             / /_/ // / / // __  // ___// __ \
+            / __  // /_/ // /_/ // /   / /_/ /
+           /_/ /_/ \__, / \__,_//_/    \____/
+                  /____/
+
+Hydro is implemented in C++. To include Hydro in a project use...
+
+#include <hydro/hydro.hpp>
+
+...to include all public headers. See /docs/Setup.md for details
+regarding initialization of the HvmEnv, a foreign function
+interface necessary for interacting with the virtual machine.

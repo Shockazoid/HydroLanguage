@@ -1,0 +1,39 @@
+//
+//                 __  __            __           
+//                / / / /__  __ ____/ /_____ ____ 
+//               / /_/ // / / // __  // ___// __ \
+//              / __  // /_/ // /_/ // /   / /_/ /
+//             /_/ /_/ \__, / \__,_//_/    \____/ 
+//                    /____/                      
+//
+//              The Hydro Programming Language
+//
+
+package system.io
+
+import system
+
+public final native class FileStream < Object
+{
+
+	public native prop isOpen
+	{
+		[get]
+	}
+
+	public native prop isEof
+	{
+		[get]
+	}
+
+	public native constructor()
+
+	public native meth open(path : string)
+
+	public native meth close()
+
+	public native meth read() : string
+
+	public native meth get() : char
+	
+}

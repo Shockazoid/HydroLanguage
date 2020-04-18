@@ -1,0 +1,32 @@
+//
+//                 __  __            __           
+//                / / / /__  __ ____/ /_____ ____ 
+//               / /_/ // / / // __  // ___// __ \
+//              / __  // /_/ // /_/ // /   / /_/ /
+//             /_/ /_/ \__, / \__,_//_/    \____/ 
+//                    /____/                      
+//
+//              The Hydro Programming Language
+//
+//        © 2020 Shockazoid, Inc. All Rights Reserved.
+//
+
+#ifndef __h3o_VMContextData__
+#define __h3o_VMContextData__
+
+#include "VMObject.hpp"
+#include "ContextParam.hpp"
+
+namespace hydro
+{
+
+struct ContextData : public VMObject
+{
+    ContextData *base;
+    uint16_t nparams;
+    ContextParam **params;
+};
+
+} // namespace hydro
+
+#endif /* __h3o_VMContextData__ */
