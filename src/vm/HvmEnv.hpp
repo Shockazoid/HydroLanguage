@@ -278,9 +278,9 @@ public:
         hconstructor createConstructor(const VM_Constructor *vconstruct, hclass ownerClass);
 
         hproperty createProperty(const VM_Property *vproperty, hclass ownerClass);
-        hgetter createGetter(const GetterData *vgetter, hproperty ownerProperty);
+        hgetter createGetter(const VM_Getter *vgetter, hproperty ownerProperty);
         
-        hsetter createSetter(const SetterData *vsetter, hproperty ownerProperty);
+        hsetter createSetter(const VM_Setter *vsetter, hproperty ownerProperty);
         
         hmethod createMethod(const VM_Method *vmethod, hclass ownerClass);
             

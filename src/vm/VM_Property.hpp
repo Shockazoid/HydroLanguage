@@ -20,8 +20,8 @@
 #include "VMObject.hpp"
 #include "VM_Member.hpp"
 #include "TypeSpecifier.hpp"
-#include "GetterData.hpp"
-#include "SetterData.hpp"
+#include "VM_Getter.hpp"
+#include "VM_Setter.hpp"
 
 namespace hydro
 {
@@ -30,8 +30,8 @@ struct VM_Property : public VMObject, public VM_Member
 {
 	std::string name{""};
 	TypeSpecifier *type{nullptr};
-	GetterData *getter{nullptr};
-	SetterData *setter{nullptr};
+	VM_Getter *getter{nullptr};
+	VM_Setter *setter{nullptr};
     InstrGroup *initValue{nullptr};
 	virtual ~VM_Property() {}
 };

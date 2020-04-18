@@ -1727,7 +1727,7 @@ void H3oAssembler::parseNext()
 
         if (owner)
         {
-            GetterData *vgetter = new GetterData{};
+            VM_Getter *vgetter = new VM_Getter{};
             vgetter->automatic = autoProp;
             vgetter->chunk = _result;
             GetterNode *node = new GetterNode{owner, vgetter};
@@ -1775,7 +1775,7 @@ void H3oAssembler::parseNext()
 
         if (owner)
         {
-            SetterData *vsetter = new SetterData{};
+            VM_Setter *vsetter = new VM_Setter{};
             vsetter->automatic = autoProp;
             vsetter->chunk = _result;
             SetterNode *node = new SetterNode{owner, vsetter};

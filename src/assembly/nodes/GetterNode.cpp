@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-GetterNode::GetterNode(PropertyNode *owner, GetterData *vgetter) : FuncNode{vgetter}, _owner{owner}, _vgetter{vgetter} {}
+GetterNode::GetterNode(PropertyNode *owner, VM_Getter *vgetter) : FuncNode{vgetter}, _owner{owner}, _vgetter{vgetter} {}
 
 GetterNode::~GetterNode() {}
 

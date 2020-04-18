@@ -18,7 +18,7 @@
 namespace hydro
 {
 
-HSetter::HSetter(HvmEnv *env, HClass *setterClass, const SetterData *vsetter, HProperty *ownerProperty, function_glue *glue) : HObject{env, setterClass}, RuntimeContext{ownerProperty->ownerClass()}, _vsetter{vsetter}, _glue{glue} {}
+HSetter::HSetter(HvmEnv *env, HClass *setterClass, const VM_Setter *vsetter, HProperty *ownerProperty, function_glue *glue) : HObject{env, setterClass}, RuntimeContext{ownerProperty->ownerClass()}, _vsetter{vsetter}, _glue{glue} {}
 
 HSetter::~HSetter() {}
 

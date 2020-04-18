@@ -16,7 +16,7 @@
 
 #include "FuncNode.hpp"
 #include "PropertyNode.hpp"
-#include "../../vm/SetterData.hpp"
+#include "../../vm/VM_Setter.hpp"
 #include "../../vm/NilTypeSpecifier.hpp"
 
 namespace hydro
@@ -25,14 +25,14 @@ namespace hydro
 class SetterNode : public FuncNode
 {
 private:
-	SetterData *_vsetter;
+	VM_Setter *_vsetter;
     PropertyNode *_owner;
     
 public:
-	SetterNode(PropertyNode *owner, SetterData *vsetter);
+	SetterNode(PropertyNode *owner, VM_Setter *vsetter);
 	virtual ~SetterNode();
     virtual void build(Chunk *chunk) override;
-	SetterData *vsetter() const { return _vsetter; }
+	VM_Setter *vsetter() const { return _vsetter; }
 };
 
 } // namespace hydro

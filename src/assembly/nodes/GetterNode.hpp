@@ -16,7 +16,7 @@
 
 #include "FuncNode.hpp"
 #include "PropertyNode.hpp"
-#include "../../vm/GetterData.hpp"
+#include "../../vm/VM_Getter.hpp"
 
 namespace hydro
 {
@@ -25,13 +25,13 @@ class GetterNode : public FuncNode
 {
 private:
     PropertyNode *_owner;
-	GetterData *_vgetter;
+	VM_Getter *_vgetter;
 
 public:
-	GetterNode(PropertyNode *owner, GetterData *getter);
+	GetterNode(PropertyNode *owner, VM_Getter *getter);
 	virtual ~GetterNode();
     virtual void build(Chunk *chunk) override;
-	GetterData *vgetter() const { return _vgetter; }
+	VM_Getter *vgetter() const { return _vgetter; }
 };
 
 } // namespace hydro

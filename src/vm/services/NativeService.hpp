@@ -118,7 +118,7 @@ private:
         return nullptr;
     }
 
-    function_glue *glue(const GetterData *vgetter) const
+    function_glue *glue(const VM_Getter *vgetter) const
     {
         const VM_Property *vproperty = vgetter->property;
         
@@ -140,7 +140,7 @@ private:
         return nullptr;
     }
 
-    function_glue *glue(const SetterData *vsetter) const
+    function_glue *glue(const VM_Setter *vsetter) const
     {
         const VM_Property *vproperty = vsetter->property;
         

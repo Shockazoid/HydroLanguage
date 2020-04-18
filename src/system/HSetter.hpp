@@ -15,7 +15,7 @@
 #define __h3o_HSetter__
 
 #include "../vm/RuntimeContext.hpp"
-#include "../vm/SetterData.hpp"
+#include "../vm/VM_Setter.hpp"
 #include "../vm/glue.hpp"
 
 namespace hydro
@@ -26,11 +26,11 @@ class HSetter final : public HObject, public RuntimeContext
     friend class HvmEnv;
     
 private:
-	const SetterData *_vsetter;
+	const VM_Setter *_vsetter;
 	class HProperty *_ownerProperty;
 	function_glue *_glue;
     
-    HSetter(HvmEnv *env, HClass *setterClass, const SetterData *vsetter, HProperty *ownerProperty, function_glue *glue = nullptr);
+    HSetter(HvmEnv *env, HClass *setterClass, const VM_Setter *vsetter, HProperty *ownerProperty, function_glue *glue = nullptr);
 
 public:
 	virtual ~HSetter();

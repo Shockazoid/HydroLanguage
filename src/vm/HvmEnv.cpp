@@ -465,7 +465,7 @@ hproperty HvmEnv::createProperty(const VM_Property *vproperty, hclass ownerClass
     return new HProperty{this, _coreService->PropertyClass(), vproperty, ownerClass, glue};
 }
 
-hgetter HvmEnv::createGetter(const GetterData *vgetter, hproperty ownerProperty)
+hgetter HvmEnv::createGetter(const VM_Getter *vgetter, hproperty ownerProperty)
 {
     function_glue *glue;
     if(is_native(vgetter->property->modifier))
@@ -487,7 +487,7 @@ hgetter HvmEnv::createGetter(const GetterData *vgetter, hproperty ownerProperty)
     return new HGetter{this, _coreService->GetterClass(), vgetter, ownerProperty, glue};
 }
 
-hsetter HvmEnv::createSetter(const SetterData *vsetter, hproperty ownerProperty)
+hsetter HvmEnv::createSetter(const VM_Setter *vsetter, hproperty ownerProperty)
 {
     function_glue *glue;
     

@@ -17,7 +17,7 @@
 namespace hydro
 {
 
-HGetter::HGetter(HvmEnv *env, HClass *getterClass, const GetterData *vgetter, HProperty *ownerProperty, function_glue *glue) : HObject{env, getterClass}, RuntimeContext{ownerProperty->ownerClass()}, _vgetter{vgetter}, _glue{glue} {}
+HGetter::HGetter(HvmEnv *env, HClass *getterClass, const VM_Getter *vgetter, HProperty *ownerProperty, function_glue *glue) : HObject{env, getterClass}, RuntimeContext{ownerProperty->ownerClass()}, _vgetter{vgetter}, _glue{glue} {}
 
 HGetter::~HGetter() {}
 

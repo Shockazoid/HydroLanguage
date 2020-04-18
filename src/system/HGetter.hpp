@@ -15,7 +15,7 @@
 #define __h3o_RuntimeGetter__
 
 #include "../vm/RuntimeContext.hpp"
-#include "../vm/GetterData.hpp"
+#include "../vm/VM_Getter.hpp"
 #include "../vm/glue.hpp"
 
 namespace hydro
@@ -28,11 +28,11 @@ class HGetter final : public HObject, public RuntimeContext
     friend HvmEnv;
     
 private:
-	const GetterData *_vgetter;
+	const VM_Getter *_vgetter;
 	class HProperty *_ownerProperty;
     function_glue *_glue;
     
-    HGetter(HvmEnv *env, HClass *getterClass, const GetterData *vgetter, HProperty *ownerProperty, function_glue *glue = nullptr);
+    HGetter(HvmEnv *env, HClass *getterClass, const VM_Getter *vgetter, HProperty *ownerProperty, function_glue *glue = nullptr);
     
 public:
 	virtual ~HGetter();

@@ -11,15 +11,15 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_GetterData__
-#define __h3o_GetterData__
+#ifndef __h3o_VM_Getter__
+#define __h3o_VM_Getter__
 
 #include "VM_Method.hpp"
 
 namespace hydro
 {
 
-struct GetterData : public VM_Method
+struct VM_Getter : public VM_Method
 {
     bool automatic{false};
 	struct VM_Property *property{nullptr};
@@ -27,4 +27,4 @@ struct GetterData : public VM_Method
 
 } // namespace hydro
 
-#endif /* __h3o_GetterData__ */
+#endif /* __h3o_VM_Getter__ */

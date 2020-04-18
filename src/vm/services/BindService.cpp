@@ -200,7 +200,7 @@ hproperty BindService::createProperty(const VM_Property *vproperty, hclass owner
     return new Property{this, _coreService->PropertyClass(), vproperty, ownerClass, glue};
 }
 
-hgetter BindService::createGetter(const GetterData *vgetter, hproperty ownerProperty)
+hgetter BindService::createGetter(const VM_Getter *vgetter, hproperty ownerProperty)
 {
     function_glue *glue;
     if(is_native(vgetter->property->modifier))
@@ -222,7 +222,7 @@ hgetter BindService::createGetter(const GetterData *vgetter, hproperty ownerProp
     return new Getter{this, _coreService->GetterClass(), vgetter, ownerProperty, glue};
 }
 
-hsetter BindService::createSetter(const SetterData *vsetter, hproperty ownerProperty)
+hsetter BindService::createSetter(const VM_Setter *vsetter, hproperty ownerProperty)
 {
     function_glue *glue;
     

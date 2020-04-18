@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-SetterNode::SetterNode(PropertyNode *owner, SetterData *vsetter) : FuncNode{vsetter}, _owner{owner}, _vsetter{vsetter} {}
+SetterNode::SetterNode(PropertyNode *owner, VM_Setter *vsetter) : FuncNode{vsetter}, _owner{owner}, _vsetter{vsetter} {}
 
 SetterNode::~SetterNode() {}
 
