@@ -11,8 +11,8 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_EventContext__
-#define __h3o_EventContext__
+#ifndef __h3o_HEventContext__
+#define __h3o_HEventContext__
 
 #include "HObject.hpp"
 #include "HEventType.hpp"
@@ -41,4 +41,4 @@ typedef object_ptr<HEventContext> hevent;
 
 } // namespace hydro
 
-#endif /* __h3o_Event__ */
+#endif /* __h3o_HEventContext__ */

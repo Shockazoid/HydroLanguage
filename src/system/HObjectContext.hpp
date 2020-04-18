@@ -24,7 +24,7 @@
 #include "../vm/modifiers.hpp"
 #include "../vm/hvalue.hpp"
 #include "../vm/VM_Object.hpp"
-#include "../vm/VMContext.hpp"
+#include "../vm/EventContext.hpp"
 
 namespace hydro
 {

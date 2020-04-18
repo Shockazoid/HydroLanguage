@@ -11,8 +11,8 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_VMContext__
-#define __h3o_VMContext__
+#ifndef __h3o_EventContext__
+#define __h3o_EventContext__
 
 #include "VM_Event.hpp"
 #include "Value.hpp"
@@ -20,7 +20,7 @@
 namespace hydro
 {
 
-struct VMContext
+struct EventContext
 {
     const VM_Event *data;
     Value **params;
@@ -28,4 +28,4 @@ struct VMContext
 
 } // namespace hydro
 
-#endif /* __h3o_VMContext__ */
+#endif /* __h3o_EventContext__ */

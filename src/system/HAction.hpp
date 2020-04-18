@@ -43,7 +43,7 @@ private:
 public:
 	virtual ~HAction();
     hvalue trigger(HvmContext *threadContext, VM *vm, std::map<std::string, hvalue> &params, hvalue thisObject = nullptr);
-    hvalue trigger(HvmContext *threadContext, VM *vm, VMContext *eventContext, hvalue thisObject = nullptr);
+    hvalue trigger(HvmContext *threadContext, VM *vm, EventContext *eventContext, hvalue thisObject = nullptr);
     virtual uint16_t modifier() const override { return _vaction->modifier; }
     virtual std::string assemblyName() const override { return _vaction->name; }
     virtual runtime_context_type type() const override { return hvm_runtime_action; }

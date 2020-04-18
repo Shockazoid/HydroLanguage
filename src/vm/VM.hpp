@@ -113,9 +113,9 @@ private:
     void call(HvmContext *threadContext, hvalue callable, std::map<std::string, hvalue> &args, hvalue &result, hvalue thisObject = nullptr);
     void trigger(HvmContext *cxt, hvalue triggerable, std::map<std::string, hvalue> &args, hvalue &result, hvalue thisObject = nullptr);
 
-	CallFrame *prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::list<hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr, bool useDynamicScope = false);
-    CallFrame *prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &map, std::list<hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr, bool useDynamicScope = false);
-    CallFrame *prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr, bool useDynamicScope = false);
+	CallFrame *prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::list<hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr);
+    CallFrame *prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &map, std::list<hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr);
+    CallFrame *prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &args, MemorySpace *scopeToUse = nullptr, hvalue thisObject = nullptr);
 
 	void dissasemble(uint8_t opcode, uint32_t ip, Chunk *chunk);
 	void dumpMemory(HvmContext *cxt);

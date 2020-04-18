@@ -20,7 +20,7 @@
 #include "Closure.hpp"
 #include "HvmContext.hpp"
 #include "VM.hpp"
-#include "VMContext.hpp"
+#include "EventContext.hpp"
 
 namespace hydro
 {
@@ -315,7 +315,7 @@ struct action_glue
     action_glue(Closure *clos = nullptr) : closure{clos} {}
     virtual ~action_glue() {}
     virtual hvalue trigger(HvmContext *threadContext, class HAction *callee, VM *vm, std::map<std::string, hvalue> &args, hvalue thisObject) = 0;
-    virtual hvalue trigger(HvmContext *threadContext, class HAction *callee, VM *vm, VMContext *eventContext, hvalue thisObject) = 0;
+    virtual hvalue trigger(HvmContext *threadContext, class HAction *callee, VM *vm, EventContext *eventContext, hvalue thisObject) = 0;
 };
 
 struct hydro_action final : public action_glue
@@ -335,7 +335,7 @@ struct hydro_action final : public action_glue
         // returned void
         return undefined;
     }
-    virtual hvalue trigger(HvmContext *threadContext, class HAction *callee, VM *vm, VMContext *eventContext, hvalue thisObject) override
+    virtual hvalue trigger(HvmContext *threadContext, class HAction *callee, VM *vm, EventContext *eventContext, hvalue thisObject) override
     {
         hvalue result;
         /*

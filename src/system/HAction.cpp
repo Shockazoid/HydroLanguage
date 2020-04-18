@@ -39,7 +39,7 @@ hvalue HAction::trigger(HvmContext *threadContext, VM *vm, std::map<std::string,
     return _glue->trigger(threadContext, this, vm, params, thisObject);
 }
 
-hvalue HAction::trigger(HvmContext *threadContext, VM *vm, VMContext *eventContext, hvalue thisObject)
+hvalue HAction::trigger(HvmContext *threadContext, VM *vm, EventContext *eventContext, hvalue thisObject)
 {
     return false;
 }

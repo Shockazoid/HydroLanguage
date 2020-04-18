@@ -22,7 +22,7 @@
 #include "VM_Func.hpp"
 #include "Closure.hpp"
 #include "RuntimeContext.hpp"
-#include "VMContext.hpp"
+#include "EventContext.hpp"
 
 namespace hydro
 {
@@ -32,7 +32,7 @@ struct CallFrame
 	Chunk *chunk;
 	CallFrame *parentFrame{nullptr};
 	Closure *closure{nullptr};
-    VMContext *context{nullptr};
+    EventContext *context{nullptr};
 	const VM_Func *data{nullptr};
     RuntimeContext *callee;
 	MemorySpace *locals;

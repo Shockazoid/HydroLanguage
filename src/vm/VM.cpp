@@ -74,7 +74,7 @@ MemorySpace *VM::findVar(std::string name, MemorySpace *scope)
 
 MemorySpace *VM::findVarWithDynamicScaope(std::string name, CallFrame *frame)
 {
-	while (frame && frame->dynamic)
+	while (frame)
 	{
 		if (frame->locals->exists(name))
 			return frame->locals;
@@ -88,28 +88,29 @@ MemorySpace *VM::findVarWithDynamicScaope(std::string name, CallFrame *frame)
 
 bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &result)
 {
-	bool retVal = false;
-	uint32_t addr;											 // any address
-	uint32_t startAddr = currentFrame->startAddr, endAddr = currentFrame->endAddr; // start and end
-	bytearray &bin = chunk->bytes;
-	MemorySpace *scopeWithVar;
-	uint8_t instr;
-	hvalue a, b, c;	// operands
-	int32_t i, j, index; // any int
-	HObject *obj;
-	std::string name;
-	uint32_t &ip = currentFrame->ip;
+    bool retVal = false;
+    uint32_t addr;                                             // any address
+    uint32_t startAddr = currentFrame->startAddr, endAddr = currentFrame->endAddr; // start and end
+    bytearray &bin = chunk->bytes;
+    MemorySpace *scopeWithVar;
+    uint8_t instr;
+    hvalue a, b, c;    // operands
+    int32_t i, j, index; // any int
+    HObject *obj;
+    std::string name;
+    uint32_t &ip = currentFrame->ip;
     uint32_t &ipActive = currentFrame->ipActive;
+    const Closure *closure;
     
-	// init address
-	ip = startAddr;
+    // init address
+    ip = startAddr;
 
-	// push current frame
-	cxt->currentFrame = currentFrame;
+    // push current frame
+    cxt->currentFrame = currentFrame;
 
-	// emulate
-	while (!currentFrame->halt && ip < endAddr && ip < bin.size())
-	{
+    // emulate
+    while (!currentFrame->halt && ip < endAddr && ip < bin.size())
+    {
         
         if(cxt->errorPending)
         {
@@ -119,213 +120,259 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             continue;
         }
         
-		instr = bin.get(ip); // read byte
+        instr = bin.get(ip); // read byte
         ipActive = ip;
         
         #ifdef HVM_TRACE
-		// trace instruction
+        // trace instruction
         if(currentFrame->trace)
             dissasemble(instr, ip, chunk);
         #endif
         
         try {
 
-		// instruction dispatcher
-		switch (instr)
-		{
-		case store_instr:
-		{
-			i = bin.getInt(ip);
-			a = opeek(currentFrame); // value
-			currentFrame->locals->slots[i]->content = a;
-			break;
-		}
-		case load_instr:
-		{
-			i = bin.getInt(ip);
-			opush(currentFrame, currentFrame->locals->slots[i]->content);
-			break;
-		}
-		case gstore_instr:
-		{
-			a = opeek(currentFrame);	// value
-			i = bin.getInt(ip); // slot
-			//_globals->slots[i]->content = a;
-			break;
-		}
-		case gload_instr:
-		{
-			i = bin.getInt(ip);
-			//opush(currentFrame, _globals->slots[i]->content);
-			break;
-		}
-		case define_instr:
-		{
-			a = opeek(currentFrame);
-			i = bin.getInt(ip); // slot
-			//std::cout << i << " : " << currentFrame->locals->size() << std::endl;
-			//currentFrame->locals->slots[i]->content = a;
-			break;
-		}
-		case true_instr:
-		{
-			// push true
-			opush(currentFrame, true);
-			break;
-		}
-		case false_instr:
-		{
-			// push false
-			opush(currentFrame, false);
-			break;
-		}
-		case null_instr:
-		{
-			// push null
-			opush(currentFrame, nullptr);
-			break;
-		}
-		case undefined_instr:
-		{
-			// push undefined
-			opush(currentFrame, undefined);
-			break;
-		}
-		case inf_instr:
-		{
-			// push positive Infinity
-			opush(currentFrame, std::numeric_limits<double>::infinity());
-			break;
-		}
-		case nan_instr:
-		{
-			// push NaN
-			opush(currentFrame, std::nan(""));
-			break;
-		}
-		case rload_instr:
-		{
-			// load definition 
-			name = chunk->names[bin.getInt(ip)]; // qualified class name
-			hobject def = chunk->runtime->find(name); // find definition
+        // instruction dispatcher
+        switch (instr)
+        {
+        case store_instr:
+        {
+            // store local by slot
+            i = bin.getInt(ip);
+            a = opeek(currentFrame); // value
+            currentFrame->locals->slots[i]->content = a;
+            break;
+        }
+        case load_instr:
+        {
+            // load local by slot
+            i = bin.getInt(ip);
+            opush(currentFrame, currentFrame->locals->slots[i]->content);
+            break;
+        }
+        case ustore_instr:
+        {
+            // store upvalue on closure
+            i = bin.getInt(ip); // slot number
+            j = bin.getInt(ip); // closure offset
+            a = opop(currentFrame);
+            closure = currentFrame->closure;
             
-			if (def)
+            while (j-- > 0)
+                closure = closure->parent;
+            
+            if (!closure)
+            {
+                // error
+                runtimeError(cxt, "Out of bounds closure offset.");
+            }
+            
+            //closure->upvalues[i]->content = a;
+            break;
+        }
+        case uload_instr:
+        {
+            // load upvalue from closure
+            i = bin.getInt(ip); // slot number
+            j = bin.getInt(ip); // closure offset
+            closure = currentFrame->closure;
+            
+            while (j-- > 0)
+                closure = closure->parent;
+            
+            if (!closure)
+            {
+                // error
+                runtimeError(cxt, "Out of bounds closure offset.");
+            }
+            
+            //opush(currentFrame, closure->upvalues[i]->content);
+            break;
+        }
+        case gstore_instr:
+        {
+            // store global
+            a = opeek(currentFrame);    // value
+            i = bin.getInt(ip); // slot
+            //_globals->slots[i]->content = a;
+            break;
+        }
+        case gload_instr:
+        {
+            // load global
+            i = bin.getInt(ip);
+            //opush(currentFrame, _globals->slots[i]->content);
+            break;
+        }
+        case define_instr: // TODO deprecate
+        {
+            a = opeek(currentFrame);
+            i = bin.getInt(ip); // slot
+            //std::cout << i << " : " << currentFrame->locals->size() << std::endl;
+            //currentFrame->locals->slots[i]->content = a;
+            break;
+        }
+        case true_instr:
+        {
+            // push true
+            opush(currentFrame, true);
+            break;
+        }
+        case false_instr:
+        {
+            // push false
+            opush(currentFrame, false);
+            break;
+        }
+        case null_instr:
+        {
+            // push null
+            opush(currentFrame, nullptr);
+            break;
+        }
+        case undefined_instr:
+        {
+            // push undefined
+            opush(currentFrame, undefined);
+            break;
+        }
+        case inf_instr:
+        {
+            // push positive Infinity
+            opush(currentFrame, std::numeric_limits<double>::infinity());
+            break;
+        }
+        case nan_instr:
+        {
+            // push NaN
+            opush(currentFrame, std::nan(""));
+            break;
+        }
+        case this_instr:
+        {
+            // push this
+            opush(currentFrame, currentFrame->thisObject);
+            break;
+        }
+        case rload_instr:
+        {
+            // load definition by full assembly name
+            name = chunk->names[bin.getInt(ip)]; // qualified class name
+            hobject def = chunk->runtime->find(name); // find definition
+            
+            if (def)
                 opush(currentFrame, hvalue{def});
-			else
-				opush(currentFrame, undefined);
-			break;
-		}
-		case this_instr:
-		{
-			opush(currentFrame, currentFrame->thisObject);
-			break;
-		}
-		case object_instr:
-		{
-			// object
-			opush(currentFrame, hvalue{_env->make()->object()});
-			break;
-		}
-		case objectinit_instr:
-		{
-			name = chunk->names[bin.getInt(ip)];
-			b = opop(currentFrame);  // value
-			a = opeek(currentFrame); // object
-			if (a.type() == typeid(HObject *))
-			{
-				HObject *obj = a;
-				// todo test system::Object
-				if (!obj)
+            else
+                opush(currentFrame, undefined);
+            break;
+        }
+        case object_instr:
+        {
+            // push new object instance
+            opush(currentFrame, hvalue{_env->make()->object()});
+            break;
+        }
+        case objectinit_instr:
+        {
+            // initialize a property on an object instance
+            name = chunk->names[bin.getInt(ip)];
+            b = opop(currentFrame);  // value
+            a = opeek(currentFrame); // object
+            if (a.type() == typeid(HObject *))
+            {
+                HObject *obj = a;
+                // todo test system::Object
+                if (!obj)
                 {
-					runtimeError(cxt, "Cannot initialize property '" + name + "' on null.");
+                    runtimeError(cxt, "Cannot initialize property '" + name + "' on null.");
                 }
 
-				obj->_cxt->setProperty(_env, this, currentFrame->callee, cxt, name, b);
-			}
-			else
-            {
-				runtimeError(cxt, "Expecting operand to be a dictionary.");
+                obj->_cxt->setProperty(_env, this, currentFrame->callee, cxt, name, b);
             }
-			break;
-		}
-		case json_instr:
-		{
-			opush(currentFrame, _env->make()->json());
-			break;
-		}
-		case jsoninit_instr:
-		{
-			i = bin.getInt(ip);     // constant pool index
-			c = opop(currentFrame);		 // value
-			b = opeek(currentFrame);		 // json instance
-			a = chunk->constPool[i]; // string constant
-			hjson json = b;		 // cast
-			json->_cxt->setIndex(_env, this, currentFrame->callee, cxt, a, c);
-			break;
-		}
-		case list_instr:
-		{
-			// array
-			opush(currentFrame, _env->make()->list());
-			break;
-		}
-		case listpush:
-		{
-			// array list push
-			b = opop(currentFrame);  // element
-			a = opeek(currentFrame); // list
-			obj = a;
-			if (HList *list = dynamic_cast<HList *>(obj))
-			{
-				// push element
-				list->push(b);
-			}
-			break;
-		}
-		case dict_instr:
-		{
-			// dictionary
-			opush(currentFrame, _env->make()->dictionary());
-			break;
-		}
-		case dictinit_instr:
-		{
-			c = opop(currentFrame);  // value
-			b = opop(currentFrame);  // key
-			a = opeek(currentFrame); // dictionary
-			hdictionary dict = a;
-			dict->_cxt->setIndex(_env, this, currentFrame->callee, cxt, b, c);
-			break;
-		}
-		case tup_instr:
-		{
-			// tuple
-			//i = bin.getInt(ip); // length of tuplele{i};
-			//opush(currentFrame, new Tuple{(uint32_t)i});
-			break;
-		};
-		case xml_instr:
-		{
-			// xml
+            else
+            {
+                runtimeError(cxt, "Expecting operand to be a dictionary.");
+            }
+            break;
+        }
+        case json_instr:
+        {
+            
+            opush(currentFrame, _env->make()->json());
+            break;
+        }
+        case jsoninit_instr:
+        {
+            i = bin.getInt(ip);     // constant pool index
+            c = opop(currentFrame);         // value
+            b = opeek(currentFrame);         // json instance
+            a = chunk->constPool[i]; // string constant
+            hjson json = b;         // cast
+            json->_cxt->setIndex(_env, this, currentFrame->callee, cxt, a, c);
+            break;
+        }
+        case list_instr:
+        {
+            // array
+            opush(currentFrame, _env->make()->list());
+            break;
+        }
+        case listpush:
+        {
+            // array list push
+            b = opop(currentFrame);  // element
+            a = opeek(currentFrame); // list
+            obj = a;
+            if (HList *list = dynamic_cast<HList *>(obj))
+            {
+                // push element
+                list->push(b);
+            }
+            break;
+        }
+        case dict_instr:
+        {
+            // dictionary
+            opush(currentFrame, _env->make()->dictionary());
+            break;
+        }
+        case dictinit_instr:
+        {
+            c = opop(currentFrame);  // value
+            b = opop(currentFrame);  // key
+            a = opeek(currentFrame); // dictionary
+            hdictionary dict = a;
+            dict->_cxt->setIndex(_env, this, currentFrame->callee, cxt, b, c);
+            break;
+        }
+        case tup_instr:
+        {
+            // tuple
+            //i = bin.getInt(ip); // length of tuplele{i};
+            //opush(currentFrame, new Tuple{(uint32_t)i});
+            break;
+        };
+        case xml_instr:
+        {
+            // xml
 
-			break;
-		}
-		case rgx_instr:
-		{
-			// regular expression
+            break;
+        }
+        case rgx_instr:
+        {
+            // regular expression
 
-			break;
-		}
-		case typeof_instr:
-		{
-			a = opop(currentFrame); // subject
-			if (is_undefined(a))
-				opush(currentFrame, "undefined");
-			else if (is_null(a) || is_object(a))
-				opush(currentFrame, "object");
-			else if (is_byte(a))
-				opush(currentFrame, "byte");
-			/*
+            break;
+        }
+        case typeof_instr:
+        {
+            a = opop(currentFrame); // subject
+            if (is_undefined(a))
+                opush(currentFrame, "undefined");
+            else if (is_null(a) || is_object(a))
+                opush(currentFrame, "object");
+            else if (is_byte(a))
+                opush(currentFrame, "byte");
+            /*
                     a = opop(); // subject
                     a = wrap(a);
                     if (is_undefined(a))
@@ -343,80 +390,80 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                     else
                         opush(undefined);
                     */
-			break;
-		}
-		case is_instr:
-		{
-			b = opop(currentFrame); // rhs
-			a = opop(currentFrame); // lhs
+            break;
+        }
+        case is_instr:
+        {
+            b = opop(currentFrame); // rhs
+            a = opop(currentFrame); // lhs
 
-			if (is_object(a) && is_object(b))
-			{
-				obj = a;
-				HObject *type = b;
-				opush(currentFrame, _env->typing()->check(type, obj));
-				break;
-			}
+            if (is_object(a) && is_object(b))
+            {
+                obj = a;
+                HObject *type = b;
+                opush(currentFrame, _env->typing()->check(type, obj));
+                break;
+            }
 
-			// fail
-			opush(currentFrame, false);
-			break;
-		}
-		case as_instr:
-		{
-			b = opop(currentFrame); // rhs
-			a = opop(currentFrame); // lhs
-			//a = wrap(a);
-			// TODO cast as
-			opush(currentFrame, b);
-			//log("Warning! Cast 'as' is not yet supported.");
-			break;
-		}
-		case pop_instr:
-		{
-			opop(currentFrame);
-			break;
-		}
-		case dup_instr:
-		{
-			a = opop(currentFrame);
-			opush(currentFrame, a);
-			opush(currentFrame, a); // duplicate
-			break;
-		}
-		case swp_instr:
-		{
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, b);
-			opush(currentFrame, a); // such that a is on the top of the stack
-			break;
-		}
-		case jmp_instr:
-		{
-			ip = bin.getInt(ip); // jump
-			break;
-		}
-		case brt_instr:
-		{
-			addr = bin.getInt(ip);
-			a = opop(currentFrame);
-			if (a)
-				ip = addr; // jump if true
-			break;
-		}
-		case brf_instr:
-		{
-			addr = bin.getInt(ip);
-			a = opop(currentFrame);
-			if (!a)
-				ip = addr; // jump if false
-			break;
-		}
-		case push_instr:
-		{
-			i = bin.getInt(ip);
-			a = chunk->constPool[i];
+            // fail
+            opush(currentFrame, false);
+            break;
+        }
+        case as_instr:
+        {
+            b = opop(currentFrame); // rhs
+            a = opop(currentFrame); // lhs
+            //a = wrap(a);
+            // TODO cast as
+            opush(currentFrame, b);
+            //log("Warning! Cast 'as' is not yet supported.");
+            break;
+        }
+        case pop_instr:
+        {
+            opop(currentFrame);
+            break;
+        }
+        case dup_instr:
+        {
+            a = opop(currentFrame);
+            opush(currentFrame, a);
+            opush(currentFrame, a); // duplicate
+            break;
+        }
+        case swp_instr:
+        {
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, b);
+            opush(currentFrame, a); // such that a is on the top of the stack
+            break;
+        }
+        case jmp_instr:
+        {
+            ip = bin.getInt(ip); // jump
+            break;
+        }
+        case brt_instr:
+        {
+            addr = bin.getInt(ip);
+            a = opop(currentFrame);
+            if (a)
+                ip = addr; // jump if true
+            break;
+        }
+        case brf_instr:
+        {
+            addr = bin.getInt(ip);
+            a = opop(currentFrame);
+            if (!a)
+                ip = addr; // jump if false
+            break;
+        }
+        case push_instr:
+        {
+            i = bin.getInt(ip);
+            a = chunk->constPool[i];
             
             if (is_const_function(a))
             {
@@ -428,25 +475,25 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                 // closure is a class
                 opush(currentFrame, _env->makeClass((const VM_Class *)a));
             }
-			else
-			{
-				// push constant
-				opush(currentFrame, a);
-			}
-			break;
-		};
-		case new_instr:
-		{
-			j = bin.getInt(ip); // nargs
-			a = opop(currentFrame);
+            else
+            {
+                // push constant
+                opush(currentFrame, a);
+            }
+            break;
+        };
+        case new_instr:
+        {
+            j = bin.getInt(ip); // nargs
+            a = opop(currentFrame);
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
 
-			if (hclass type = a.tryCast<HClass>())
-			{
+            if (hclass type = a.tryCast<HClass>())
+            {
                 HConstructor *construct = type->constructor();
                 
                 if(construct)
@@ -477,22 +524,22 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                     // class is not constructible
                     runtimeError(cxt, "Type '" + get_qualified_name(type->assemblyName()) + "' is not constructible.");
                 }
-			}
-			else
-			{
-				// not a class
+            }
+            else
+            {
+                // not a class
                 runtimeError(cxt, "Cannot instantiate " + describe(a) + ".");
-			}
-			break;
-		}
-		case callsuper_instr:
-		{
-			j = bin.getInt(ip); // nargs
+            }
+            break;
+        }
+        case callsuper_instr:
+        {
+            j = bin.getInt(ip); // nargs
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
             
             // check that current frame is constructor call
             if(HConstructor *constructor = dynamic_cast<HConstructor *>(currentFrame->callee))
@@ -519,187 +566,187 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                 // illegal!
                 runtimeError(cxt, "Call to super constructor outside of a constructor context.");
             }
-			break;
-		}
-		case neg_instr:
-		{
-			// negation
-			opush(currentFrame, -opop(currentFrame));
-			break;
-		}
-		case mul_instr:
-		{
-			// multiplication
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a * b);
-			break;
-		}
-		case div_instr:
-		{
-			// division
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a / b);
-			break;
-		}
-		case add_instr:
-		{
-			// addition
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			if (is_string(a) || is_string(b))
-			{
-				// string concatenation
-				std::string stringA = _env->cast()->string(a);
-				std::string stringB = _env->cast()->string(b);
-				std::string s = stringA + stringB;
+            break;
+        }
+        case neg_instr:
+        {
+            // negation
+            opush(currentFrame, -opop(currentFrame));
+            break;
+        }
+        case mul_instr:
+        {
+            // multiplication
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a * b);
+            break;
+        }
+        case div_instr:
+        {
+            // division
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a / b);
+            break;
+        }
+        case add_instr:
+        {
+            // addition
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            if (is_string(a) || is_string(b))
+            {
+                // string concatenation
+                std::string stringA = _env->cast()->string(a);
+                std::string stringB = _env->cast()->string(b);
+                std::string s = stringA + stringB;
                 // TODO the following code fixes a major bug
-				//c = _env->makeString(s);
+                //c = _env->makeString(s);
                 c = s;
-				opush(currentFrame, c);
-			}
-			else
-			{
-				// add
-				opush(currentFrame, a + b);
-			}
-			break;
-		}
-		case sub_instr:
-		{
-			// subtraction
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a - b);
-			break;
-		}
-		case exp_instr:
-		{
-			// exponetial
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a.exp(b));
-			break;
-		}
-		case mod_instr:
-		{
-			// exponetial
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a % b);
-			break;
-		}
-		case pos_instr:
-		{
-			// positive
-			opush(currentFrame, +opop(currentFrame));
-			break;
-		}
-		case lnt_instr:
-		{
-			// logical NOT
-			opush(currentFrame, !opop(currentFrame));
-			break;
-		}
-		case lnd_instr:
-		{
-			// logical AND
-			addr = bin.getInt(ip);
-			b = opeek(currentFrame);
-			if (!b)
-			{
-				// jump if true (without popping stack)
-				ip = addr;
-			}
-			else
-			{
-				// false
-				opop(currentFrame);
-			}
-			break;
-		}
-		case lor_instr:
-		{
-			// logical OR
-			addr = bin.getInt(ip);
-			b = opeek(currentFrame);
-			if (b)
-			{
-				// jump if true (without popping stack)
-				ip = addr;
-			}
-			else
-			{
-				// false
-				opop(currentFrame);
-			}
-			break;
-		}
-		case leq_instr:
-		{
-			// equality
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a == b);
-			break;
-		}
-		case liq_instr:
-		{
-			// inequality
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a != b);
-			break;
-		}
-		case seq_instr:
-		{
-			// strict equality
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a == b);
-			break;
-		}
-		case siq_instr:
-		{
-			// strict inequality
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a != b);
-			break;
-		}
-		case gt_instr:
-		{
-			// greater than
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a > b);
-			break;
-		}
-		case gte_instr:
-		{
-			// greater than or equal
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a >= b);
-			break;
-		}
-		case lt_instr:
-		{
-			// less than
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a < b);
-			break;
-		}
-		case lte_instr:
-		{
-			// less than or equal
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a <= b);
-			break;
-		}
+                opush(currentFrame, c);
+            }
+            else
+            {
+                // add
+                opush(currentFrame, a + b);
+            }
+            break;
+        }
+        case sub_instr:
+        {
+            // subtraction
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a - b);
+            break;
+        }
+        case exp_instr:
+        {
+            // exponetial
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a.exp(b));
+            break;
+        }
+        case mod_instr:
+        {
+            // exponetial
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a % b);
+            break;
+        }
+        case pos_instr:
+        {
+            // positive
+            opush(currentFrame, +opop(currentFrame));
+            break;
+        }
+        case lnt_instr:
+        {
+            // logical NOT
+            opush(currentFrame, !opop(currentFrame));
+            break;
+        }
+        case lnd_instr:
+        {
+            // logical AND
+            addr = bin.getInt(ip);
+            b = opeek(currentFrame);
+            if (!b)
+            {
+                // jump if true (without popping stack)
+                ip = addr;
+            }
+            else
+            {
+                // false
+                opop(currentFrame);
+            }
+            break;
+        }
+        case lor_instr:
+        {
+            // logical OR
+            addr = bin.getInt(ip);
+            b = opeek(currentFrame);
+            if (b)
+            {
+                // jump if true (without popping stack)
+                ip = addr;
+            }
+            else
+            {
+                // false
+                opop(currentFrame);
+            }
+            break;
+        }
+        case leq_instr:
+        {
+            // equality
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a == b);
+            break;
+        }
+        case liq_instr:
+        {
+            // inequality
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a != b);
+            break;
+        }
+        case seq_instr:
+        {
+            // strict equality
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a == b);
+            break;
+        }
+        case siq_instr:
+        {
+            // strict inequality
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a != b);
+            break;
+        }
+        case gt_instr:
+        {
+            // greater than
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a > b);
+            break;
+        }
+        case gte_instr:
+        {
+            // greater than or equal
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a >= b);
+            break;
+        }
+        case lt_instr:
+        {
+            // less than
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a < b);
+            break;
+        }
+        case lte_instr:
+        {
+            // less than or equal
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a <= b);
+            break;
+        }
         case inc_instr:
         {
             // call local by name
@@ -707,13 +754,12 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             name = chunk->names[index];
             scopeWithVar = nullptr;
             
-            // resolve local using dynamic scope
-            if (currentFrame->dynamic)
-                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
-
             // resolve local using static scope
-            if (!scopeWithVar)
-                scopeWithVar = findVar(name, currentFrame->locals);
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
+                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
 
             // if does not exist
             if (!scopeWithVar)
@@ -736,13 +782,12 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             name = chunk->names[index];
             scopeWithVar = nullptr;
             
-            // resolve local using dynamic scope
-            if (currentFrame->dynamic)
-                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
-
             // resolve local using static scope
-            if (!scopeWithVar)
-                scopeWithVar = findVar(name, currentFrame->locals);
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
+                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
 
             // if does not exist
             if (!scopeWithVar)
@@ -758,119 +803,119 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             opush(currentFrame, c);
             break;
         }
-		case call_instr:
-		{
-			// call local by register number
-			i = bin.getInt(ip); // slot number
-			j = bin.getInt(ip); // get nargs
+        case call_instr:
+        {
+            // call local by register number
+            i = bin.getInt(ip); // slot number
+            j = bin.getInt(ip); // get nargs
 
-			if (i > 0)
-			{
-				//a = currentFrame->currentScope()->registers[i];
-			}
-            
-            
-            if(cxt->errorPending)
-                continue;
-            
-			break;
-		}
-		case callproperty_instr:
-		{
-			// call field by field number
-			a = opop(currentFrame);	 // subject
-			i = bin.getInt(ip); // field number
-			j = bin.getInt(ip); // get nargs
-			if (i > 0)
-			{
-			}
-            
-            if(cxt->errorPending)
-                continue;
-            
-			break;
-		}
-		case callindex_instr: // call index
-		{
-			b = opop(currentFrame);	 // index
-			a = opop(currentFrame);	 // subject
-			j = bin.getInt(ip); // get nargs
-
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
-
-			if (!is_object(a))
+            if (i > 0)
             {
-				runtimeError(cxt, "Subscript access not available on " + describe(a));
+                //a = currentFrame->currentScope()->registers[i];
+            }
+            
+            
+            if(cxt->errorPending)
+                continue;
+            
+            break;
+        }
+        case callproperty_instr:
+        {
+            // call field by field number
+            a = opop(currentFrame);     // subject
+            i = bin.getInt(ip); // field number
+            j = bin.getInt(ip); // get nargs
+            if (i > 0)
+            {
+            }
+            
+            if(cxt->errorPending)
+                continue;
+            
+            break;
+        }
+        case callindex_instr: // call index
+        {
+            b = opop(currentFrame);     // index
+            a = opop(currentFrame);     // subject
+            j = bin.getInt(ip); // get nargs
+
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
+
+            if (!is_object(a))
+            {
+                runtimeError(cxt, "Subscript access not available on " + describe(a));
             }
 
-			obj = a; // cast
-			if (obj->_cxt->callIndex(_env, this, currentFrame->callee, cxt, b, args, c))
+            obj = a; // cast
+            if (obj->_cxt->callIndex(_env, this, currentFrame->callee, cxt, b, args, c))
             {
                 if(cxt->errorPending)
                     break;
                 
-				opush(currentFrame, c);
+                opush(currentFrame, c);
             }
-			else
+            else
             {
-				runtimeError(cxt, "Illegal subscript access on " + describe(a));
+                runtimeError(cxt, "Illegal subscript access on " + describe(a));
             }
-			break;
-		}
-		case chain_instr: // method chaining
-		{
+            break;
+        }
+        case chain_instr: // method chaining
+        {
 
-			break;
-		}
-		case bnt_instr:
-		{
-			// bitwise NOT
-			opush(currentFrame, ~opop(currentFrame));
-			break;
-		}
-		case bnd_instr:
-		{
-			// bitwise AND
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a & b);
-			break;
-		}
-		case bor_instr:
-		{
-			// bitwise OR
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a | b);
-			break;
-		}
-		case bxr_instr:
-		{
-			// bitwise XOR
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a ^ b);
-			break;
-		}
-		case brs_instr:
-		{
-			// bitwise right shift
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a >> b);
-			break;
-		}
-		case bls_instr:
-		{
-			// bitwise left shift
-			b = opop(currentFrame);
-			a = opop(currentFrame);
-			opush(currentFrame, a << b);
-			break;
-		}
+            break;
+        }
+        case bnt_instr:
+        {
+            // bitwise NOT
+            opush(currentFrame, ~opop(currentFrame));
+            break;
+        }
+        case bnd_instr:
+        {
+            // bitwise AND
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a & b);
+            break;
+        }
+        case bor_instr:
+        {
+            // bitwise OR
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a | b);
+            break;
+        }
+        case bxr_instr:
+        {
+            // bitwise XOR
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a ^ b);
+            break;
+        }
+        case brs_instr:
+        {
+            // bitwise right shift
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a >> b);
+            break;
+        }
+        case bls_instr:
+        {
+            // bitwise left shift
+            b = opop(currentFrame);
+            a = opop(currentFrame);
+            opush(currentFrame, a << b);
+            break;
+        }
         case cload_instr:
         {
             i = bin.getInt(ip); // slot index
@@ -927,12 +972,12 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             // proceed if context exists
             a = opop(currentFrame);
             
-            if (VMContext *vmContext = currentFrame->context)
+            if (EventContext *evtContext = currentFrame->context)
             {
                 if(is_action(a))
                 {
                     haction act = a;
-                    act->trigger(cxt, this, vmContext);
+                    act->trigger(cxt, this, evtContext);
                 }
                 else
                 {
@@ -945,283 +990,280 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             }
             break;
         }
-		case callx_instr:
-		{
-			// call local by name
-			i = bin.getInt(ip); // name index
-			j = bin.getInt(ip); // get nargs
-			name = chunk->names[i];
-			scopeWithVar = nullptr;
+        case callx_instr:
+        {
+            // call local by name
+            i = bin.getInt(ip); // name index
+            j = bin.getInt(ip); // get nargs
+            name = chunk->names[i];
+            scopeWithVar = nullptr;
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
 
-			// resolve callable using dynamic scope
-			if (currentFrame->dynamic)
-				scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
+            // resolve local using static scope
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
+                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
 
-			// resolve callable using static scope
-			if (!scopeWithVar)
-				scopeWithVar = findVar(name, currentFrame->locals);
-
-			// if does not exist
-			if (!scopeWithVar)
+            // if does not exist
+            if (!scopeWithVar)
             {
-				runtimeError(cxt, "Attempted invocation of undefined local symbol '" + name + "'.");
+                runtimeError(cxt, "Attempted invocation of undefined local symbol '" + name + "'.");
             }
 
-			// get callable
-			scopeWithVar->get(name, a);
+            // get callable
+            scopeWithVar->get(name, a);
 
-			call(cxt, a, args, b);
+            call(cxt, a, args, b);
             
             if(cxt->errorPending)
                 continue;
             
-			opush(currentFrame, b);
-			break;
-		}
-		case callpropertyx_instr:
-		{
-			index = bin.getInt(ip);    // name index
-			j = bin.getInt(ip);	  // get nargs
-			name = chunk->names[index]; // property name
+            opush(currentFrame, b);
+            break;
+        }
+        case callpropertyx_instr:
+        {
+            index = bin.getInt(ip);    // name index
+            j = bin.getInt(ip);      // get nargs
+            name = chunk->names[index]; // property name
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
 
-			a = opop(currentFrame); // instance
+            a = opop(currentFrame); // instance
 
-			if (a.type() == typeid(HObject *))
-			{
-				obj = a;
+            if (a.type() == typeid(HObject *))
+            {
+                obj = a;
 
-				if (obj)
-				{
-					if (obj->_cxt->callProperty(_env, this, currentFrame->callee, cxt, name, args, b))
+                if (obj)
+                {
+                    if (obj->_cxt->callProperty(_env, this, currentFrame->callee, cxt, name, args, b))
                     {
                         if(cxt->errorPending)
                             continue;
                         
-						opush(currentFrame, b);
+                        opush(currentFrame, b);
                     }
-					else
-					{
-						// error!
+                    else
+                    {
+                        // error!
                         runtimeError(cxt, "Cannot call property '" + name + "' on " + describe(obj) + ".");
-					}
-				}
-				else
-				{
-					// instance is nil
-					runtimeError(cxt, "Cannot call property '" + name + "' on null.");
-				}
-			}
-			else
-				runtimeError(cxt, "Cannot invoke property '" + name + "' on non-object: " + ((std::string)a));
-			break;
-		}
-		case chainx_instr:
-		{
-			index = bin.getInt(ip);    // name index
-			j = bin.getInt(ip);	  // get nargs
-			name = chunk->names[index]; // property name
+                    }
+                }
+                else
+                {
+                    // instance is nil
+                    runtimeError(cxt, "Cannot call property '" + name + "' on null.");
+                }
+            }
+            else
+                runtimeError(cxt, "Cannot invoke property '" + name + "' on non-object: " + ((std::string)a));
+            break;
+        }
+        case chainx_instr:
+        {
+            index = bin.getInt(ip);    // name index
+            j = bin.getInt(ip);      // get nargs
+            name = chunk->names[index]; // property name
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
 
-			a = opop(currentFrame); // instance
+            a = opop(currentFrame); // instance
 
-			if (a.type() == typeid(HObject *))
-			{
-				obj = a;
+            if (a.type() == typeid(HObject *))
+            {
+                obj = a;
 
-				if (obj)
-				{
-					obj->_cxt->callProperty(_env, this, currentFrame->callee, cxt, name, args, b);
+                if (obj)
+                {
+                    obj->_cxt->callProperty(_env, this, currentFrame->callee, cxt, name, args, b);
 
                     if(cxt->errorPending)
                         continue;
                     
-				}
-				else
-				{
-					// instance is nil
-					runtimeError(cxt, "Cannot call property '" + name + "' on null.");
-				}
-			}
-			else
-            {
-				runtimeError(cxt, "Cannot invoke property '" + name + "' on non-object: " + ((std::string)a));
+                }
+                else
+                {
+                    // instance is nil
+                    runtimeError(cxt, "Cannot call property '" + name + "' on null.");
+                }
             }
-			opush(currentFrame, a); // push
-			break;
-		}
+            else
+            {
+                runtimeError(cxt, "Cannot invoke property '" + name + "' on non-object: " + ((std::string)a));
+            }
+            opush(currentFrame, a); // push
+            break;
+        }
         case setproperty_instr:
-		case setpropertyx_instr: // TODO remove
-		{
-			// store field by name
-			i = bin.getInt(ip);    // name index
-			b = opop(currentFrame);		// value
-			a = opop(currentFrame);		// subject
-			name = chunk->names[i]; // property name
-			if (a.type() == typeid(HObject *))
-			{
-				obj = a;
-                if (obj->_cxt->setProperty(_env, this, currentFrame->callee, cxt, name, b))
-					opush(currentFrame, b);
-				else
-				{
-					// error
-					runtimeError(cxt, "Cannot write property \"" + name + "\" on " + describe(a) + "."); // cannot set property on 'x' instance
-				}
-			}
-			else
-			{
-				// not an object
-				runtimeError(cxt, "Cannot write \"" + name + "\" property on \"" + describe(a) + "\".");
-			}
-			break;
-		}
-        case getproperty_instr:
-		case getpropertyx_instr: // TODO remove
-		{
-			// load field by name
-			i = bin.getInt(ip);    // register number or name index
-			a = opop(currentFrame);		// subject
-			name = chunk->names[i]; // property name
-			if (a.type() == typeid(HObject *))
-			{
-				obj = a;
-				if (obj->_cxt->getProperty(_env, this, currentFrame->callee, cxt, name, b))
-					opush(currentFrame, b);
-				else
-                    runtimeError(cxt, "Attempting to read undefined property \"" + name + "\" property on " + describe(a) + ".");
-			}
-			else
-				runtimeError(cxt, "Attempting to read '" + name + "' property on non-object.");
-			break;
-		}
-		case storex_instr:
-		{
-			// store local by name
-			i = bin.getInt(ip);    // name index
-			a = opeek(currentFrame);		// value
-			name = chunk->names[i]; // local name
-
-			scopeWithVar = nullptr;
-
-			// resolve callable using dynamic scope
-			if (currentFrame->dynamic)
-				scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
-
-			// resolve callable using static scope
-			if (!scopeWithVar)
-				scopeWithVar = findVar(name, currentFrame->locals);
-
-			// if does not exist
-			if (scopeWithVar)
-			{
-				// store
-				scopeWithVar->set(name, a);
-			}
-			else
-			{
-				LocalVar *var = new LocalVar{};
-				var->name = name;
-				var->type = new NilTypeSpecifier{};
-				currentFrame->locals->define(var, a);
-				//currentFrame->locals->slots[currentFrame->locals->size() - 1]->content = a; // last variable created will be the scope
-			}
-			break;
-		}
-		case loadx_instr:
-		{
-			// load local by name
-			i = bin.getInt(ip);    // name index
-			name = chunk->names[i]; // local name
-			scopeWithVar = nullptr;
-
-			// resolve callable using dynamic scope
-			if (currentFrame->dynamic)
-				scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
-
-			// resolve callable using static scope
-			if (!scopeWithVar)
-				scopeWithVar = findVar(name, currentFrame->locals);
-            
-			// if does not exist
-			if (scopeWithVar)
-			{
-				scopeWithVar->get(name, a);
-				opush(currentFrame, a);
-			}
-			else
-				opush(currentFrame, undefined);
-
-			break;
-		}
-		case gstorex_instr:
-		{
-			// store global by name
-			a = opeek(currentFrame);		// value
-			i = bin.getInt(ip);    // name index
-			name = chunk->names[i]; // global name
-			_globals->set(name, a);
-			break;
-		}
-		case gloadx_instr:
-		{
-			// load global by name
-			i = bin.getInt(ip);    // name index
-			name = chunk->names[i]; // global name
-			if (_globals->get(name, a))
-				opush(currentFrame, b);
-			else
-				opush(currentFrame, undefined); // does not exist
-			break;
-		}
-		case setindex_instr:
-		{
-			// store index
-			c = opop(currentFrame); // value
-			b = opop(currentFrame); // key
-			a = opop(currentFrame); // subject
-			if (!is_object(a))
+        case setpropertyx_instr: // TODO remove
+        {
+            // store field by name
+            i = bin.getInt(ip);    // name index
+            b = opop(currentFrame);        // value
+            a = opop(currentFrame);        // subject
+            name = chunk->names[i]; // property name
+            if (a.type() == typeid(HObject *))
             {
-				runtimeError(cxt, "Subscript access is unavailable on " + describe(a));
+                obj = a;
+                if (obj->_cxt->setProperty(_env, this, currentFrame->callee, cxt, name, b))
+                    opush(currentFrame, b);
+                else
+                {
+                    // error
+                    runtimeError(cxt, "Cannot write property \"" + name + "\" on " + describe(a) + "."); // cannot set property on 'x' instance
+                }
             }
-			obj = a; // cast
-			if (obj->_cxt->setIndex(_env, this, currentFrame->callee, cxt, b, c))
-				opush(currentFrame, c);
-			else
-				runtimeError(cxt, "Illegal subscript access on " + describe(a));
-			break;
-		}
-		case getindex_instr:
-		{
-			// load index
-			b = opop(currentFrame); // key
-			a = opop(currentFrame); // subject
+            else
+            {
+                // not an object
+                runtimeError(cxt, "Cannot write \"" + name + "\" property on \"" + describe(a) + "\".");
+            }
+            break;
+        }
+        case getproperty_instr:
+        case getpropertyx_instr: // TODO remove
+        {
+            // load field by name
+            i = bin.getInt(ip);    // register number or name index
+            a = opop(currentFrame);        // subject
+            name = chunk->names[i]; // property name
+            if (a.type() == typeid(HObject *))
+            {
+                obj = a;
+                if (obj->_cxt->getProperty(_env, this, currentFrame->callee, cxt, name, b))
+                    opush(currentFrame, b);
+                else
+                    runtimeError(cxt, "Attempting to read undefined property \"" + name + "\" property on " + describe(a) + ".");
+            }
+            else
+                runtimeError(cxt, "Attempting to read '" + name + "' property on non-object.");
+            break;
+        }
+        case storex_instr:
+        {
+            // store local by name
+            i = bin.getInt(ip);    // name index
+            a = opeek(currentFrame);        // value
+            name = chunk->names[i]; // local name
+
+            scopeWithVar = nullptr;
+
+            // resolve local using static scope
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
+                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
+
+            // if does not exist
+            if (scopeWithVar)
+            {
+                // store
+                scopeWithVar->set(name, a);
+            }
+            else
+            {
+                LocalVar *var = new LocalVar{};
+                var->name = name;
+                var->type = new NilTypeSpecifier{};
+                currentFrame->locals->define(var, a);
+                //currentFrame->locals->slots[currentFrame->locals->size() - 1]->content = a; // last variable created will be the scope
+            }
+            break;
+        }
+        case loadx_instr:
+        {
+            // load local by name
+            i = bin.getInt(ip);    // name index
+            name = chunk->names[i]; // local name
+            scopeWithVar = nullptr;
+
+            // resolve local using static scope
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
+                scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
+
+            // if does not exist
+            if (scopeWithVar)
+            {
+                scopeWithVar->get(name, a);
+                opush(currentFrame, a);
+            }
+            else
+                opush(currentFrame, undefined);
+
+            break;
+        }
+        case gstorex_instr:
+        {
+            // store global by name
+            a = opeek(currentFrame);        // value
+            i = bin.getInt(ip);    // name index
+            name = chunk->names[i]; // global name
+            _globals->set(name, a);
+            break;
+        }
+        case gloadx_instr:
+        {
+            // load global by name
+            i = bin.getInt(ip);    // name index
+            name = chunk->names[i]; // global name
+            if (_globals->get(name, a))
+                opush(currentFrame, b);
+            else
+                opush(currentFrame, undefined); // does not exist
+            break;
+        }
+        case setindex_instr:
+        {
+            // store index
+            c = opop(currentFrame); // value
+            b = opop(currentFrame); // key
+            a = opop(currentFrame); // subject
             if (!is_object(a))
             {
-				runtimeError(cxt, "Subscript access not available on " + describe(a));
+                runtimeError(cxt, "Subscript access is unavailable on " + describe(a));
             }
-			obj = a; // cast
-			if (obj->_cxt->getIndex(_env, this, currentFrame->callee, cxt, b, c))
-				opush(currentFrame, c);
-			else
-				runtimeError(cxt, "Illegal subscript access on " + describe(a));
-			break;
-		}
-		case definex_instr:
-		{
+            obj = a; // cast
+            if (obj->_cxt->setIndex(_env, this, currentFrame->callee, cxt, b, c))
+                opush(currentFrame, c);
+            else
+                runtimeError(cxt, "Illegal subscript access on " + describe(a));
+            break;
+        }
+        case getindex_instr:
+        {
+            // load index
+            b = opop(currentFrame); // key
+            a = opop(currentFrame); // subject
+            if (!is_object(a))
+            {
+                runtimeError(cxt, "Subscript access not available on " + describe(a));
+            }
+            obj = a; // cast
+            if (obj->_cxt->getIndex(_env, this, currentFrame->callee, cxt, b, c))
+                opush(currentFrame, c);
+            else
+                runtimeError(cxt, "Illegal subscript access on " + describe(a));
+            break;
+        }
+        case definex_instr:
+        {
             i = bin.getInt(ip);
             a = chunk->constPool[i];
             
@@ -1242,52 +1284,52 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                 break;
             }
             else
-			if (hfunction fn = a.tryCast<HFunction>())
-			{
-				// define function
-				currentFrame->locals->define(fn->_vfunc, fn);
-			}
+            if (hfunction fn = a.tryCast<HFunction>())
+            {
+                // define function
+                currentFrame->locals->define(fn->_vfunc, fn);
+            }
             else if(haction act = a.tryCast<HAction>())
             {
                 // define action
                 currentFrame->locals->define(act->_vaction, act);
             }
-			else if (hclass clss = a.tryCast<HClass>())
-			{
-				// define class
-				currentFrame->locals->define(clss->_vclass, clss);
-			}
-			else
-			{
-				// not a function, class, event, etc.
-				throw 1;
-			}
-			break;
-		}
-		case ocall_instr:
-		{
-			j = bin.getInt(ip); // nargs
+            else if (hclass clss = a.tryCast<HClass>())
+            {
+                // define class
+                currentFrame->locals->define(clss->_vclass, clss);
+            }
+            else
+            {
+                // not a function, class, event, etc.
+                throw 1;
+            }
+            break;
+        }
+        case ocall_instr:
+        {
+            j = bin.getInt(ip); // nargs
             a = opop(currentFrame); // callable
 
-			// read args
-			std::list<hvalue> args{};
-			while (j-- > 0)
-				args.push_front(opop(currentFrame));
+            // read args
+            std::list<hvalue> args{};
+            while (j-- > 0)
+                args.push_front(opop(currentFrame));
 
-			call(cxt, a, args, b, false);
+            call(cxt, a, args, b, false);
             
             if(cxt->errorPending)
                 continue;
             
-			opush(currentFrame, b);
-			break;
-		}
-		case ret_instr:
-		{
-			retVal = currentFrame->halt = true;
-			result = opop(currentFrame);
-			break;
-		}
+            opush(currentFrame, b);
+            break;
+        }
+        case ret_instr:
+        {
+            retVal = currentFrame->halt = true;
+            result = opop(currentFrame);
+            break;
+        }
         case throw_instr:
         {
             a = opop(currentFrame);
@@ -1314,13 +1356,12 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             
             scopeWithVar = nullptr;
             
-            // resolve callable using dynamic scope
-            if (currentFrame->dynamic)
+            // resolve local using static scope
+            scopeWithVar = findVar(name, currentFrame->locals);
+            
+            // resolve local using dynamic scope
+            if(!scopeWithVar)
                 scopeWithVar = findVarWithDynamicScaope(name, currentFrame);
-
-            // resolve callable using static scope
-            if (!scopeWithVar)
-                scopeWithVar = findVar(name, currentFrame->locals);
 
             // if does not exist
             if (!scopeWithVar)
@@ -1341,24 +1382,24 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             opush(currentFrame, c);
             break;
         }
-		case log_instr:
-		{
-			// log
-			a = opop(currentFrame);
-			std::cout << ((std::string)a) << std::endl;
-			break;
-		}
-		case hlt_instr:
-		{
-			currentFrame->halt = true;
-			break;
-		}
-		default:
-		{
-			currentFrame->halt = true;
-			break;
-		}
-		}
+        case log_instr:
+        {
+            // log
+            a = opop(currentFrame);
+            std::cout << ((std::string)a) << std::endl;
+            break;
+        }
+        case hlt_instr:
+        {
+            currentFrame->halt = true;
+            break;
+        }
+        default:
+        {
+            currentFrame->halt = true;
+            break;
+        }
+        }
 
         }
         catch(std::runtime_error err)
@@ -1377,9 +1418,9 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
         {
             // do nothing
         }
-	}
+    }
 
-	cxt->ip = currentFrame->returnAddr;
+    cxt->ip = currentFrame->returnAddr;
     cxt->currentFrame = currentFrame->parentFrame;
     
     // clean memory
@@ -1387,10 +1428,10 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
         while (!_opndStack.empty())
             _opndStack.pop();
     
-	// garbage collection
-	delete currentFrame;
+    // garbage collection
+    delete currentFrame;
 
-	return retVal;
+    return retVal;
 }
 
 void VM::dissasemble(uint8_t opcode, uint32_t ip, Chunk *chunk)
@@ -1538,7 +1579,7 @@ void VM::trigger(HvmContext *threadContext, hvalue triggerable, std::map<std::st
     }
 }
 
-CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
+CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject)
 {
 	// function (or callable)
     const VM_Func *data = dynamic_cast<const VM_Func *>(closure->data);
@@ -1643,7 +1684,6 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
             argFrame->data = data;
 			argFrame->chunk = data->chunk;
 			argFrame->closure = closure;
-			argFrame->dynamic = useDynamicScope;
 			argFrame->startAddr = defaultVal->startAddr;
 			argFrame->endAddr = defaultVal->endAddr;
 			argFrame->thisObject = nullptr; // not applicable
@@ -1715,9 +1755,6 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
 	frame->closure = closure;
 	frame->callee = callee;
 
-	// is dynamic scope enabled?
-	frame->dynamic = useDynamicScope;
-
 	// set thisObject on scope
 	frame->thisObject = thisObject;
     
@@ -1731,7 +1768,7 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
 	return frame;
 }
 
-CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &map, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
+CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &map, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject)
 {
     // function (or callable)
     const VM_Func *data = dynamic_cast<const VM_Func *>(closure->data);
@@ -1778,7 +1815,7 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
     return prepVmCall(threadContext, callee, closure, args, scopeToUse, thisObject);
 }
 
-CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &params, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
+CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &params, MemorySpace *scopeToUse, hvalue thisObject)
 {
     // will only be an action
     const VM_Action *data = dynamic_cast<const VM_Action *>(closure->data);
@@ -1824,7 +1861,7 @@ CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, 
 
     // ensure scope exists
     MemorySpace *locals = new MemorySpace{data, scopeToUse};
-    VMContext *vmContext = new VMContext{};
+    EventContext *vmContext = new EventContext{};
     vmContext->data = contextData;
     vmContext->params = new Value*[nparams];
     
@@ -1901,9 +1938,6 @@ CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, 
     frame->endAddr = data->endAddr;
     frame->closure = closure;
     frame->callee = callee;
-
-    // is dynamic scope enabled?
-    frame->dynamic = useDynamicScope;
 
     // set thisObject on scope
     frame->thisObject = thisObject;
@@ -2004,7 +2038,6 @@ bool VM::exec(HvmContext *cxt, Chunk *chunk, hvalue &result, MemorySpace *scopeT
 	frame->startAddr = main->startAddr;
 	frame->endAddr = main->endAddr;
     frame->closure = fn->_glue->closure;
-	frame->dynamic = false;
 	frame->thisObject = nullptr;
     frame->callee = fn;
     
