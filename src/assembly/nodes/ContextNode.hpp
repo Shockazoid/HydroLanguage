@@ -16,7 +16,7 @@
 
 #include "BlockNode.hpp"
 #include "ParamNode.hpp"
-#include "../../vm/ContextData.hpp"
+#include "../../vm/VM_Context.hpp"
 
 namespace hydro
 {
@@ -24,15 +24,15 @@ namespace hydro
 class ContextNode : public BlockNode
 {
 protected:
-    ContextData *_vcontext;
+    VM_Context *_vcontext;
     std::vector<ParamNode *> _params;
     
 public:
-    ContextNode(ContextData *vcontext);
+    ContextNode(VM_Context *vcontext);
     virtual ~ContextNode();
     void appendParam(ParamNode *param);
     virtual void build(Chunk *chunk) override;
-    ContextData *vcontext() const { return _vcontext; }
+    VM_Context *vcontext() const { return _vcontext; }
 };
 
 } // namespace hydro

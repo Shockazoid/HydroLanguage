@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-HContext::HContext(HvmEnv *env, HClass *contextClass, const ContextData *vcontext) : HObject{env, contextClass}, _vcontext{vcontext} {}
+HContext::HContext(HvmEnv *env, HClass *contextClass, const VM_Context *vcontext) : HObject{env, contextClass}, _vcontext{vcontext} {}
 
 HContext::~HContext() {}
 

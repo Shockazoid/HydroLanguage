@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-ContextNode::ContextNode(ContextData *vcontext) : _vcontext{vcontext} {}
+ContextNode::ContextNode(VM_Context *vcontext) : _vcontext{vcontext} {}
 
 ContextNode::~ContextNode() {}
 
