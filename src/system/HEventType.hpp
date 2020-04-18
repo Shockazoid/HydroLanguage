@@ -15,7 +15,7 @@
 #define __h3o_EventType__
 
 #include "HObject.hpp"
-#include "../vm/EtypeData.hpp"
+#include "../vm/VM_Etype.hpp"
 
 namespace hydro
 {
@@ -25,10 +25,10 @@ class HEventType : public HObject
     friend class HvmEnv;
     
 private:
-    const EtypeData *_vetype;
+    const VM_Etype *_vetype;
     class HEventContext *_owner;
     std::string _value;
-    HEventType(HvmEnv *env, HClass *eventTypeClass, const EtypeData *vetype, HEventContext *owner);
+    HEventType(HvmEnv *env, HClass *eventTypeClass, const VM_Etype *vetype, HEventContext *owner);
     
 public:
     virtual ~HEventType();

@@ -15,7 +15,7 @@
 #define __h3o_VMContextData__
 
 #include "VMObject.hpp"
-#include "ContextParam.hpp"
+#include "EventParam.hpp"
 
 namespace hydro
 {
@@ -24,7 +24,7 @@ struct ContextData : public VMObject
 {
     ContextData *base;
     uint16_t nparams;
-    ContextParam **params;
+    EventParam **params;
 };
 
 } // namespace hydro

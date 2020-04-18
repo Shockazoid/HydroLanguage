@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-HConstructor::HConstructor(HvmEnv *env, HClass *constructorClass, const ConstructorData *vconstruct, HClass *ownerClass, function_glue *glue) : RuntimeContext{ownerClass}, HObject{env, constructorClass}, _vconstruct{vconstruct}, _glue{glue} {}
+HConstructor::HConstructor(HvmEnv *env, HClass *constructorClass, const VM_Constructor *vconstruct, HClass *ownerClass, function_glue *glue) : RuntimeContext{ownerClass}, HObject{env, constructorClass}, _vconstruct{vconstruct}, _glue{glue} {}
 
 HConstructor::~HConstructor() {}
 hvalue HConstructor::call(HvmContext *threadContext, VM *vm, std::list<hvalue> &args, hvalue thisObject)

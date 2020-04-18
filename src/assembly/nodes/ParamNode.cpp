@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-ParamNode::ParamNode(ContextParam *vparam, InstrGroupNode *defaultValue) : _vparam{vparam}, _defaultValue{defaultValue}  {}
+ParamNode::ParamNode(EventParam *vparam, InstrGroupNode *defaultValue) : _vparam{vparam}, _defaultValue{defaultValue}  {}
 
 ParamNode::~ParamNode() {}
 

@@ -15,7 +15,7 @@
 #define __h3o_ConstructorNode__
 
 #include "FuncNode.hpp"
-#include "../../vm/ConstructorData.hpp"
+#include "../../vm/VM_Constructor.hpp"
 
 namespace hydro
 {
@@ -23,13 +23,13 @@ namespace hydro
 class ConstructorNode : public FuncNode
 {
 private:
-	ConstructorData *_constructor;
+	VM_Constructor *_constructor;
 
 public:
-	ConstructorNode(ConstructorData *constructor);
+	ConstructorNode(VM_Constructor *constructor);
 	virtual ~ConstructorNode();
 	virtual void build(Chunk *chunk) override;
-	ConstructorData *constructor() const { return _constructor; }
+	VM_Constructor *constructor() const { return _constructor; }
 };
 
 } // namespace hydro

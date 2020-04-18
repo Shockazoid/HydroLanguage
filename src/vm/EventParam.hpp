@@ -11,4 +11,22 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#include "ContextParameterDeclaration.hpp"
+#ifndef __h3o_EventParam__
+#define __h3o_EventParam__
+
+#include "VMObject.hpp"
+#include "TypeSpecifier.hpp"
+#include "InstrGroup.hpp"
+
+namespace hydro
+{
+
+struct EventParam : public VMObject
+{
+    TypeSpecifier *type;
+    InstrGroup *defaultValue;
+};
+
+} // namespace hydro
+
+#endif /* __h3o_EventParam__ */

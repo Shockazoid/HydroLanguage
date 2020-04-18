@@ -53,7 +53,7 @@ hvalue BindService::ifNotExists(Runtime *runtime, const ActionData *vact) const
     return act;
 }
 
-hvalue BindService::ifNotExists(Runtime *runtime, const EventData *vevent) const
+hvalue BindService::ifNotExists(Runtime *runtime, const VM_Event *vevent) const
 {
     if(hvalue result = hvalue{runtime->find(vevent->name)})
         return result;
@@ -94,7 +94,7 @@ haction BindService::createAction(const ActionData *vact)
     return new Action{this, _coreService->ActionClass(), vact, glue};
 }
 
-hevent BindService::createEvent(const EventData *vevent)
+hevent BindService::createEvent(const VM_Event *vevent)
 {
     return new EventContext{this, _coreService->EventContextClass(), vevent};
 }
@@ -104,7 +104,7 @@ hfunction BindService::bindMethod(hmethod method, Object *instance)
     return new Function{this, _coreService->FunctionClass(), method->_vmethod, method->_glue};
 }
 
-hetype BindService::createEtype(const EtypeData *vetype, hevent event)
+hetype BindService::createEtype(const VM_Etype *vetype, hevent event)
 {
     return new EventType{this, _coreService->EtypeClass(), vetype, event};
 }
@@ -150,7 +150,7 @@ hclass BindService::makeClass(const VM_Class *vclass)
     return new Class{this, _coreService->ClassClass(), vclass, superClass, allocator};
 }
 
-hconstructor BindService::createConstructor(const ConstructorData *vconstruct, hclass ownerClass)
+hconstructor BindService::createConstructor(const VM_Constructor *vconstruct, hclass ownerClass)
 {
     function_glue *glue;
     

@@ -16,9 +16,9 @@
 
 #include "BlockNode.hpp"
 #include "ParamNode.hpp"
-#include "../../vm/EventData.hpp"
-#include "../../vm/EtypeData.hpp"
-#include "../../vm/ContextParam.hpp"
+#include "../../vm/VM_Event.hpp"
+#include "../../vm/VM_Etype.hpp"
+#include "../../vm/EventParam.hpp"
 
 namespace hydro
 {
@@ -26,18 +26,18 @@ namespace hydro
 class EventNode : public BlockNode
 {
 public:
-    EventNode(EventData *vevent, std::string superEventName = "");
+    EventNode(VM_Event *vevent, std::string superEventName = "");
     virtual ~EventNode();
     bool etypeExists(std::string etypeValue);
-    void appendEtype(EtypeData *etype);
+    void appendEtype(VM_Etype *etype);
     void appendParam(ParamNode *param);
     virtual void build(Chunk *chunk) override;
-    EventData *vevent() const { return _vevent; }
+    VM_Event *vevent() const { return _vevent; }
     std::string superEventName() const { return _superEventName; }
 protected:
-    EventData *_vevent;
+    VM_Event *_vevent;
     std::string _superEventName;
-    std::vector<EtypeData *> _etypes;
+    std::vector<VM_Etype *> _etypes;
     std::vector<ParamNode *> _params;
 };
 

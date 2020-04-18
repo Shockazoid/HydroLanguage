@@ -16,7 +16,7 @@
 
 #include "HObject.hpp"
 #include "HEventType.hpp"
-#include "../vm/EventData.hpp"
+#include "../vm/VM_Event.hpp"
 
 namespace hydro
 {
@@ -26,13 +26,13 @@ class HEventContext : public HObject
     friend class HvmEnv;
     
 private:
-    const EventData *_vevent;
+    const VM_Event *_vevent;
     HEventContext *_superEvent;
-    HEventContext(HvmEnv *env, HClass *eventContextClass, const EventData *vevent, HEventContext *superEvent = nullptr);
+    HEventContext(HvmEnv *env, HClass *eventContextClass, const VM_Event *vevent, HEventContext *superEvent = nullptr);
     
 public:
     virtual ~HEventContext();
-    const EventData *vevent() { return _vevent; }
+    const VM_Event *vevent() { return _vevent; }
     HEventContext *superEvent() const { return _superEvent; }
     virtual std::string toString() override { return "[event " + get_simple_name(_vevent->name) + "]"; }
 };

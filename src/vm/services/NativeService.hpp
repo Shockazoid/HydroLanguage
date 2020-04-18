@@ -81,7 +81,7 @@ private:
         return nullptr;
     }
 
-    function_glue *glue(const ConstructorData *vconstruct) const
+    function_glue *glue(const VM_Constructor *vconstruct) const
     {
         if(is_native(vconstruct->modifier))
         {

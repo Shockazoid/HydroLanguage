@@ -16,7 +16,7 @@
 
 #include "H3oNode.hpp"
 #include "InstrGroupNode.hpp"
-#include "../../vm/ContextParam.hpp"
+#include "../../vm/EventParam.hpp"
 
 namespace hydro
 {
@@ -24,14 +24,14 @@ namespace hydro
 class ParamNode : public H3oNode
 {
 private:
-    ContextParam *_vparam;
+    EventParam *_vparam;
     InstrGroupNode *_defaultValue;
     
 public:
-    ParamNode(ContextParam *vparam, InstrGroupNode *defaultValue = nullptr);
+    ParamNode(EventParam *vparam, InstrGroupNode *defaultValue = nullptr);
     virtual ~ParamNode();
     virtual void build(Chunk *chunk) override;
-    ContextParam *vparam() const { return _vparam; }
+    EventParam *vparam() const { return _vparam; }
 };
 
 } // namespace hydro

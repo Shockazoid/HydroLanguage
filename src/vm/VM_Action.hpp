@@ -15,14 +15,14 @@
 #define __h3o_VM_Action__
 
 #include "FuncData.hpp"
-#include "EventData.hpp"
+#include "VM_Event.hpp"
 
 namespace hydro
 {
 
 struct VM_Action : public FuncData
 {
-    const EventData *context;
+    const VM_Event *context;
 };
 
 } // namespace hydro

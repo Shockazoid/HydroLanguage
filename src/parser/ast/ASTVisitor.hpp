@@ -92,7 +92,7 @@ public:
     virtual bool visit(class ContextDeclaration *decl) = 0;
     virtual bool visit(class EventDeclaration *decl) = 0;
     virtual bool visit(class EtypeDeclaration *decl) = 0;
-    virtual bool visit(class ContextParameterDeclaration *decl) = 0;
+    virtual bool visit(class EventParameterDeclaration *decl) = 0;
     virtual bool visit(class StateDeclaration *decl) = 0;
     virtual bool visit(class InterfaceDeclaration *decl) = 0;
     virtual bool visit(class OperatorDeclaration *decl) = 0;

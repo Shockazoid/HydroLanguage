@@ -11,9 +11,12 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef ContextParameterDeclaration_hpp
-#define ContextParameterDeclaration_hpp
+#ifndef __h3o_ParameterDeclaration__
+#define __h3o_ParameterDeclaration__
 
-#include <stdio.h>
+namespace hydro
+{
 
-#endif /* ContextParameterDeclaration_hpp */
+} // namespace hydro
+
+#endif /* __h3o_ParameterDeclaration__ */

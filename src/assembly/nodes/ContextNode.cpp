@@ -28,7 +28,7 @@ void ContextNode::appendParam(ParamNode *param)
 void ContextNode::build(Chunk *chunk)
 {
     _vcontext->nparams = (uint16_t)_params.size();
-    _vcontext->params = new ContextParam*[_vcontext->nparams];
+    _vcontext->params = new EventParam*[_vcontext->nparams];
     for(uint16_t i = 0; i < _vcontext->nparams; i++)
     {
         _params[i]->build(chunk);

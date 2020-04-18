@@ -11,20 +11,19 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_ConstructorData__
-#define __h3o_ConstructorData__
+#ifndef __h3o_VM_Etype__
+#define __h3o_VM_Etype__
 
-#include "FuncData.hpp"
-#include "MemberData.hpp"
+#include "VMObject.hpp"
 
 namespace hydro
 {
 
-struct ConstructorData : public FuncData, public MemberData
+struct VM_Etype : VMObject
 {
-	virtual ~ConstructorData() {}
+    struct VM_Event *owner;
 };
 
 } // namespace hydro
 
-#endif /* __h3o_ConstructorData__ */
+#endif /* __h3o_VM_Etype__ */

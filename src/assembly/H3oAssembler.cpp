@@ -1413,7 +1413,7 @@ void H3oAssembler::parseNext()
             }
         }
         
-        EventData *event = nullptr;
+        VM_Event *event = nullptr;
         //event = _env->loadReservedEvent(qname);
         
         if(event)
@@ -1424,7 +1424,7 @@ void H3oAssembler::parseNext()
         else
         {
             // create event data
-            event = new EventData{};
+            event = new VM_Event{};
         }
         
         event->modifier = mod;
@@ -1460,7 +1460,7 @@ void H3oAssembler::parseNext()
         EventNode *event = getEventParent();
         if(!event)
             appendError("Etypes must be defined directly in the block of an Event declaration.");
-        EtypeData *etype = new EtypeData{};
+        VM_Etype *etype = new VM_Etype{};
         etype->owner = event->vevent();
         etype->name = name;
         etype->modifier = mod_public | mod_final;
@@ -1484,7 +1484,7 @@ void H3oAssembler::parseNext()
             mod = parseMods();
         }
         
-        ContextParam *param = new ContextParam{};
+        EventParam *param = new EventParam{};
         param->modifier = mod;
         param->type = type;
         param->name = name;
@@ -1610,7 +1610,7 @@ void H3oAssembler::parseNext()
             }
             else
             {
-                ConstructorData *construct = new ConstructorData{};
+                VM_Constructor *construct = new VM_Constructor{};
                 construct->chunk = _result;
                 construct->owner = owner->vclass();
                 construct->modifier = mod;

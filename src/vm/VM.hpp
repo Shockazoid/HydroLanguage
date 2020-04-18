@@ -21,7 +21,7 @@
 
 #include "CallFrame.hpp"
 #include "FuncData.hpp"
-#include "ConstructorData.hpp"
+#include "VM_Constructor.hpp"
 #include "PropertyData.hpp"
 #include "MethodData.hpp"
 #include "opcodes.hpp"

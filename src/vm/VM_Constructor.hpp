@@ -11,17 +11,20 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_EventOptions__
-#define __h3o_EventOptions__
+#ifndef __h3o_VM_Constructor__
+#define __h3o_VM_Constructor__
+
+#include "FuncData.hpp"
+#include "MemberData.hpp"
 
 namespace hydro
 {
 
-class EventOptions
+struct VM_Constructor : public FuncData, public MemberData
 {
-    bool useCapture;
+	virtual ~VM_Constructor() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_EventOptions__ */
+#endif /* __h3o_VM_Constructor__ */

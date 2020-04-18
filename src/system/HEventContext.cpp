@@ -18,7 +18,7 @@
 namespace hydro
 {
 
-HEventContext::HEventContext(HvmEnv *env, HClass *eventContextClass, const EventData *vevent, HEventContext *superEvent) : HObject{env, eventContextClass}, _vevent{vevent}, _superEvent{superEvent}
+HEventContext::HEventContext(HvmEnv *env, HClass *eventContextClass, const VM_Event *vevent, HEventContext *superEvent) : HObject{env, eventContextClass}, _vevent{vevent}, _superEvent{superEvent}
 {
     _cxt->ensureCapacity(_cxt->_size + _vevent->netypes);
     uint16_t j = _cxt->_size;

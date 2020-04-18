@@ -16,7 +16,7 @@
 
 #include "HObject.hpp"
 #include "HClass.hpp"
-#include "../vm/ConstructorData.hpp"
+#include "../vm/VM_Constructor.hpp"
 #include "../vm/glue.hpp"
 #include "../vm/HvmCallable.hpp"
 
@@ -32,11 +32,11 @@ class HConstructor final : public HObject, public RuntimeContext, public HvmCall
 	friend class Call;
     
 private:
-	const ConstructorData *_vconstruct;
+	const VM_Constructor *_vconstruct;
     function_glue *_glue;
     
 public:
-	HConstructor(HvmEnv *env, HClass *constructorClass, const ConstructorData *vconstruct, HClass *ownerClass, function_glue *glue);
+	HConstructor(HvmEnv *env, HClass *constructorClass, const VM_Constructor *vconstruct, HClass *ownerClass, function_glue *glue);
     hvalue call(HvmEnv *env, VM *vm, HvmContext *threadContext, RuntimeContext *callingContext, std::list<hvalue> &args, hvalue thisObject);
 	virtual ~HConstructor();
     virtual hvalue call(HvmContext *threadContext, VM *vm, std::list<hvalue> &args, hvalue thisObject = nullptr) override;

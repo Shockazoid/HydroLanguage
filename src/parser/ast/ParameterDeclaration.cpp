@@ -11,26 +11,9 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_EventData__
-#define __h3o_EventData__
-
-#include "VMObject.hpp"
-#include "MemberData.hpp"
-#include "EtypeData.hpp"
-#include "ContextParam.hpp"
+#include "ParameterDeclaration.hpp"
 
 namespace hydro
 {
 
-struct EventData : public VMObject
-{
-    const EventData *base;
-	EtypeData **etypes;
-    uint16_t netypes;
-    uint16_t nparams;
-    ContextParam **params;
-};
-
 } // namespace hydro
-
-#endif /* __h3o_EventData__ */

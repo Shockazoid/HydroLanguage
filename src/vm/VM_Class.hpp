@@ -32,7 +32,7 @@ struct VM_Class : public VMObject
     uint16_t nstatic;
 	uint16_t ninstance;
 	VMObject **fields;
-	struct ConstructorData *construct;
+	struct VM_Constructor *construct;
 	virtual ~VM_Class() {}
 };
 

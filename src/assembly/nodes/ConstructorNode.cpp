@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-ConstructorNode::ConstructorNode(ConstructorData *constructor) : FuncNode{constructor} {}
+ConstructorNode::ConstructorNode(VM_Constructor *constructor) : FuncNode{constructor} {}
 
 ConstructorNode::~ConstructorNode() {}
 

@@ -14,7 +14,7 @@
 #ifndef __h3o_VMContext__
 #define __h3o_VMContext__
 
-#include "EventData.hpp"
+#include "VM_Event.hpp"
 #include "Value.hpp"
 
 namespace hydro
@@ -22,7 +22,7 @@ namespace hydro
 
 struct VMContext
 {
-    const EventData *data;
+    const VM_Event *data;
     Value **params;
 };
 

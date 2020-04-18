@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-HEventType::HEventType(HvmEnv *env, HClass *eventTypeClass, const EtypeData *vetype, HEventContext *owner) : HObject{env, eventTypeClass}, _vetype{vetype}, _owner{owner}
+HEventType::HEventType(HvmEnv *env, HClass *eventTypeClass, const VM_Etype *vetype, HEventContext *owner) : HObject{env, eventTypeClass}, _vetype{vetype}, _owner{owner}
 {
     _value = vetype->name;
 }

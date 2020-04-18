@@ -12,7 +12,6 @@
 //
 
 #include "HvmEnv.hpp"
-#include "HvmDelegate.hpp"
 #include "VM_Class.hpp"
 #include "FuncData.hpp"
 #include "../utility/classhelper.hpp"
@@ -39,7 +38,7 @@ namespace hydro
 
 HvmEnv *HvmEnv::_instance = nullptr;
 
-HvmEnv::HvmEnv(HvmDelegate *delegate) : _globals{nullptr}, _vm{nullptr}, _currentContext{nullptr}, _reserved{}, _delegate{delegate}, _debug{false}, _srcPath{""}, _sdkPath{""}, _libPath{""}
+HvmEnv::HvmEnv() : _globals{nullptr}, _vm{nullptr}, _currentContext{nullptr}, _reserved{}, _debug{false}, _srcPath{""}, _sdkPath{""}, _libPath{""}
 {
     _instance = this;
 }
@@ -74,8 +73,6 @@ hvalue HvmEnv::eval(Source *source, MemorySpace *scopeToUse) const
 void HvmEnv::kill()
 {
 	// TODO gc() for all active contexts
-    if(_delegate)
-        _delegate->shutDown(this);
 }
 
 HvmContext *HvmEnv::createNewHeap()
@@ -308,7 +305,7 @@ hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Action *vact)
     return act;
 }
 
-hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const EventData *vevent)
+hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Event *vevent)
 {
     if(hvalue result = hvalue{runtime->find(vevent->name)})
         return result;
@@ -362,7 +359,7 @@ haction HvmEnv::createAction(const VM_Action *vact)
     return new HAction{this, _coreService->ActionClass(), vact, glue};
 }
 
-hevent HvmEnv::createEvent(const EventData *vevent)
+hevent HvmEnv::createEvent(const VM_Event *vevent)
 {
     return new HEventContext{this, _coreService->EventContextClass(), vevent};
 }
@@ -372,7 +369,7 @@ hfunction HvmEnv::bindMethod(hmethod method, HObject *instance)
     return new HFunction{this, _coreService->FunctionClass(), method->_vmethod, method->_glue};
 }
 
-hetype HvmEnv::createEtype(const EtypeData *vetype, hevent event)
+hetype HvmEnv::createEtype(const VM_Etype *vetype, hevent event)
 {
     return new HEventType{this, _coreService->EtypeClass(), vetype, event};
 }
@@ -418,7 +415,7 @@ hclass HvmEnv::makeClass(const VM_Class *vclass)
     return new HClass{this, _coreService->ClassClass(), vclass, superClass, allocator};
 }
 
-hconstructor HvmEnv::createConstructor(const ConstructorData *vconstruct, hclass ownerClass)
+hconstructor HvmEnv::createConstructor(const VM_Constructor *vconstruct, hclass ownerClass)
 {
     function_glue *glue;
     

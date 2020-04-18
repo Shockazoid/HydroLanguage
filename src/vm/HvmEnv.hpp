@@ -91,7 +91,6 @@ class HvmEnv final
     friend class HAction;
     friend class HClass;
     friend class HProperty;
-    friend class HvmDelegate;
     friend struct RuntimeService;
     friend struct ThreadService;
     friend HvmEnv *hvm_setup(HvmInitOptions *options);
@@ -208,6 +207,7 @@ public:
     
     
     private:
+        HvmEnv();
         static HvmEnv *_instance; // singleton instance
 
         std::string _srcPath, _sdkPath, _libPath;
@@ -216,7 +216,6 @@ public:
         HvmContext *_mainContext; // main
         HvmContext *_currentContext;
         std::list<HClass *> _reserved;
-        class HvmDelegate *_delegate;
         bool _debug;
 
         // services
@@ -246,8 +245,6 @@ public:
         HvmExtension<ApplicationDomainService> _appDomainService;
         Library *_nativeLib;
 
-        HvmEnv(class HvmDelegate *delegate = nullptr);
-        
         void setup(HvmInitOptions *options);
         
         void initCore();
@@ -264,21 +261,21 @@ public:
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Action *vact);
         
-        hvalue createAndBindIfNotExists(Runtime *runtime, const EventData *vevent);
+        hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Event *vevent);
         
         hfunction createFunction(const FuncData *vfunc);
         
         haction createAction(const VM_Action *vact);
         
-        hevent createEvent(const EventData *vevent);
+        hevent createEvent(const VM_Event *vevent);
         
-        hetype createEtype(const EtypeData *vetype, hevent event);
+        hetype createEtype(const VM_Etype *vetype, hevent event);
         
         hfunction bindMethod(hmethod method, HObject *instance);
             
         hclass makeClass(const VM_Class *vclass);
         
-        hconstructor createConstructor(const ConstructorData *vconstruct, hclass ownerClass);
+        hconstructor createConstructor(const VM_Constructor *vconstruct, hclass ownerClass);
 
         hproperty createProperty(const PropertyData *vproperty, hclass ownerClass);
         hgetter createGetter(const GetterData *vgetter, hproperty ownerProperty);

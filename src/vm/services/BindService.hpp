@@ -40,7 +40,7 @@ public:
     hvalue ifNotExists(Runtime *runtime, const VM_Class *vclass) const;
     hvalue ifNotExists(Runtime *runtime, const FuncData *vfunc) const;
     hvalue ifNotExists(Runtime *runtime, const VM_Action *vact) const;
-    hvalue ifNotExists(Runtime *runtime, const EventData *vevent) const;
+    hvalue ifNotExists(Runtime *runtime, const VM_Event *vevent) const;
 };
 
 } // namespace hydro

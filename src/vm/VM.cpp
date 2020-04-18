@@ -1790,14 +1790,14 @@ CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, 
         return nullptr;
     }
     
-    const EventData *contextData = data->context;
+    const VM_Event *contextData = data->context;
     
     // number of parameter arguments passed to create context
     //const uint32_t nargs = (uint32_t)args.size();
     
     // context size
     uint16_t nparams = 0;
-    const EventData *contextTarget = contextData;
+    const VM_Event *contextTarget = contextData;
     
     // get context size
     while (contextTarget)
@@ -1828,7 +1828,7 @@ CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, 
     vmContext->data = contextData;
     vmContext->params = new Value*[nparams];
     
-    std::vector<ContextParam *> defaults;
+    std::vector<EventParam *> defaults;
     
     // initialize parameters
     contextTarget = contextData;
@@ -1880,7 +1880,7 @@ CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, 
     }
     */
     
-    for(ContextParam *paramWithDefautlValue : defaults)
+    for(EventParam *paramWithDefautlValue : defaults)
     {
         hvalue value;
         
