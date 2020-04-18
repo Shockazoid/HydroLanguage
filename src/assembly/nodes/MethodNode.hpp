@@ -15,7 +15,7 @@
 #define __h3o_MethodNode__
 
 #include "FuncNode.hpp"
-#include "../../vm/MethodData.hpp"
+#include "../../vm/VM_Method.hpp"
 
 namespace hydro
 {
@@ -23,13 +23,13 @@ namespace hydro
 class MethodNode : public FuncNode
 {
 private:
-	MethodData *_method;
+	VM_Method *_method;
 
 public:
-	MethodNode(MethodData *method);
+	MethodNode(VM_Method *method);
 	virtual ~MethodNode();
 	virtual void build(Chunk *chunk);
-	MethodData *method() const { return _method; }
+	VM_Method *method() const { return _method; }
 };
 
 } // namespace hydro

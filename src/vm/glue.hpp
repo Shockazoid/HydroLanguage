@@ -34,8 +34,8 @@ struct property_glue
 
 struct hydro_property final : public property_glue
 {
-    const PropertyData *data;
-    hydro_property(const PropertyData *vproperty) : data{vproperty} {}
+    const VM_Property *data;
+    hydro_property(const VM_Property *vproperty) : data{vproperty} {}
 	virtual ~hydro_property() {}
 	virtual bool get(HvmContext *threadContext, RuntimeContext *callee, VM *vm, HObject *instance, hvalue &value) override
 	{
@@ -88,8 +88,8 @@ struct hydro_property final : public property_glue
 /*
 struct hydro_auto_getter final : public property_glue
 {
-    const PropertyData *data;
-    hydro_auto_getter(const PropertyData *vproperty) : data{vproperty} {}
+    const VM_Property *data;
+    hydro_auto_getter(const VM_Property *vproperty) : data{vproperty} {}
     virtual ~hydro_property() {}
     virtual bool get(HvmContext *threadContext, RuntimeContext *callee, VM *vm, Object *instance, hvalue &value) override
     {
@@ -123,8 +123,8 @@ struct hydro_auto_getter final : public property_glue
 
 struct hydro_auto_setter final : public property_glue
 {
-    const PropertyData *data;
-    hydro_auto_setter(const PropertyData *vproperty) : data{vproperty} {}
+    const VM_Property *data;
+    hydro_auto_setter(const VM_Property *vproperty) : data{vproperty} {}
     virtual ~hydro_auto_setter() {}
     virtual bool get(HvmContext *threadContext, RuntimeContext *callee, VM *vm, Object *instance, hvalue &value) override
     {

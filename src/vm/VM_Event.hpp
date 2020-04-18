@@ -15,7 +15,7 @@
 #define __h3o_VM_Event__
 
 #include "VMObject.hpp"
-#include "MemberData.hpp"
+#include "VM_Member.hpp"
 #include "VM_Etype.hpp"
 #include "EventParam.hpp"
 

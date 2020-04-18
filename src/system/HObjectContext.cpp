@@ -86,7 +86,7 @@ void HObjectContext::setup()
             VMObject *data = vclass->fields[i];
             
             // property?
-            if(PropertyData *prop = dynamic_cast<PropertyData *>(data))
+            if(VM_Property *prop = dynamic_cast<VM_Property *>(data))
             {
                 if(is_static(prop->modifier))
                     continue; // skip static properties
@@ -111,7 +111,7 @@ void HObjectContext::setup()
             if(!is_static(_rstatic->_vclass->fields[j]->modifier))
                 continue; // skip
             
-            if(PropertyData *prop = dynamic_cast<PropertyData *>(_rstatic->_vclass->fields[j]))
+            if(VM_Property *prop = dynamic_cast<VM_Property *>(_rstatic->_vclass->fields[j]))
             {
                 newField = new property_space{};
                 newField->data = prop;
@@ -120,7 +120,7 @@ void HObjectContext::setup()
                 newField->value = undefined;
                 fields[i++] = newField; // put
             }
-            else if(MethodData *meth = dynamic_cast<MethodData *>(_rstatic->_vclass->fields[j]))
+            else if(VM_Method *meth = dynamic_cast<VM_Method *>(_rstatic->_vclass->fields[j]))
             {
                 newField = new property_space{};
                 newField->data = meth;

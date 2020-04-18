@@ -18,7 +18,7 @@
 #include "HConstructor.hpp"
 #include "HGetter.hpp"
 #include "HSetter.hpp"
-#include "../vm/PropertyData.hpp"
+#include "../vm/VM_Property.hpp"
 
 namespace hydro
 {
@@ -28,11 +28,11 @@ class HProperty : public HObject, public RuntimeContext
 	friend class HvmEnv;
 
 private:
-	const PropertyData *_vprop;
+	const VM_Property *_vprop;
 	HGetter *_getter;
 	HSetter *_setter;
     property_glue *_glue;
-	HProperty(HvmEnv *env, HClass *propertyClass, const PropertyData *vprop, HClass *ownerClass, property_glue *glue = nullptr);
+	HProperty(HvmEnv *env, HClass *propertyClass, const VM_Property *vprop, HClass *ownerClass, property_glue *glue = nullptr);
     
 public:
 	~HProperty();

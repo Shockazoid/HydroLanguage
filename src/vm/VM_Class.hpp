@@ -19,7 +19,7 @@
 
 #include "VMObject.hpp"
 #include "Chunk.hpp"
-#include "MemberData.hpp"
+#include "VM_Member.hpp"
 
 namespace hydro
 {

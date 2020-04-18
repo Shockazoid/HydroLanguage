@@ -11,20 +11,20 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_MethodData__
-#define __h3o_MethodData__
+#ifndef __h3o_VM_Method__
+#define __h3o_VM_Method__
 
 #include "VM_Func.hpp"
-#include "MemberData.hpp"
+#include "VM_Member.hpp"
 
 namespace hydro
 {
 
-struct MethodData : public VM_Func, public MemberData
+struct VM_Method : public VM_Func, public VM_Member
 {
-	virtual ~MethodData() {}
+	virtual ~VM_Method() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_MethodData__ */
+#endif /* __h3o_VM_Method__ */

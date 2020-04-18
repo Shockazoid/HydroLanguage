@@ -172,7 +172,7 @@ hconstructor BindService::createConstructor(const VM_Constructor *vconstruct, hc
     return new Constructor{this, _coreService->ConstructorClass(), vconstruct, ownerClass, glue};
 }
 
-hproperty BindService::createProperty(const PropertyData *vproperty, hclass ownerClass)
+hproperty BindService::createProperty(const VM_Property *vproperty, hclass ownerClass)
 {
     property_glue *glue;
     
@@ -245,7 +245,7 @@ hsetter BindService::createSetter(const SetterData *vsetter, hproperty ownerProp
     return new Setter{this, _coreService->SetterClass(), vsetter, ownerProperty, glue};
 }
 
-hmethod BindService::createMethod(const MethodData *vmethod, hclass ownerClass)
+hmethod BindService::createMethod(const VM_Method *vmethod, hclass ownerClass)
 {
     function_glue *glue;
     

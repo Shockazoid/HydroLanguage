@@ -58,12 +58,12 @@ void HClass::setup()
     
     for(uint16_t i = 0; i < _vclass->nfields; i++)
     {
-        if(PropertyData *prop = dynamic_cast<PropertyData *>(_vclass->fields[i]))
+        if(VM_Property *prop = dynamic_cast<VM_Property *>(_vclass->fields[i]))
         {
             // bind property
             _fields[i] = _env->createProperty(prop, this);
         }
-        else if(MethodData *meth = dynamic_cast<MethodData *>(_vclass->fields[i]))
+        else if(VM_Method *meth = dynamic_cast<VM_Method *>(_vclass->fields[i]))
         {
             // bind method
             _fields[i] = _env->createMethod(meth, this);

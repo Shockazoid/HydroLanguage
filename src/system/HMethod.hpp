@@ -15,7 +15,7 @@
 #define __h3o_RuntimeMethod__
 
 #include "HClass.hpp"
-#include "../vm/MethodData.hpp"
+#include "../vm/VM_Method.hpp"
 #include "../vm/glue.hpp"
 
 namespace hydro
@@ -30,10 +30,10 @@ class HMethod : public HObject, public RuntimeContext
     friend class HvmEnv;
     
 private:
-	const MethodData *_vmethod;
+	const VM_Method *_vmethod;
     function_glue *_glue;
     
-    HMethod(HvmEnv *env, HClass *methodClass, const MethodData *vmethod, HClass *ownerClass, function_glue *glue);
+    HMethod(HvmEnv *env, HClass *methodClass, const VM_Method *vmethod, HClass *ownerClass, function_glue *glue);
     
 public:
 	virtual ~HMethod();

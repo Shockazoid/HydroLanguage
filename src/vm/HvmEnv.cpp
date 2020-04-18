@@ -437,7 +437,7 @@ hconstructor HvmEnv::createConstructor(const VM_Constructor *vconstruct, hclass 
     return new HConstructor{this, _coreService->ConstructorClass(), vconstruct, ownerClass, glue};
 }
 
-hproperty HvmEnv::createProperty(const PropertyData *vproperty, hclass ownerClass)
+hproperty HvmEnv::createProperty(const VM_Property *vproperty, hclass ownerClass)
 {
     property_glue *glue;
     
@@ -510,7 +510,7 @@ hsetter HvmEnv::createSetter(const SetterData *vsetter, hproperty ownerProperty)
     return new HSetter{this, _coreService->SetterClass(), vsetter, ownerProperty, glue};
 }
 
-hmethod HvmEnv::createMethod(const MethodData *vmethod, hclass ownerClass)
+hmethod HvmEnv::createMethod(const VM_Method *vmethod, hclass ownerClass)
 {
     function_glue *glue;
     

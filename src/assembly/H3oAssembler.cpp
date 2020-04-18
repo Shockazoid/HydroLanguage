@@ -1671,7 +1671,7 @@ void H3oAssembler::parseNext()
         
         if(owner)
         {
-            PropertyData *prop = new PropertyData{};
+            VM_Property *prop = new VM_Property{};
             prop->modifier = mod;
             prop->name = name;
             prop->type = type;
@@ -1837,7 +1837,7 @@ void H3oAssembler::parseNext()
 
 		if (owner)
 		{
-			MethodData *method = new MethodData{};
+			VM_Method *method = new VM_Method{};
 			method->owner = owner->vclass();
 			method->chunk = _result;
 			method->name = name; // might be anonymous

@@ -14,15 +14,15 @@
 #ifndef __h3o_SetterData__
 #define __h3o_SetterData__
 
-#include "MethodData.hpp"
+#include "VM_Method.hpp"
 
 namespace hydro
 {
 
-struct SetterData : public MethodData
+struct SetterData : public VM_Method
 {
     bool automatic{false};
-	struct PropertyData *property{nullptr};
+	struct VM_Property *property{nullptr};
 };
 
 } // namespace hydro

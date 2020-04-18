@@ -16,7 +16,7 @@
 
 #include "BlockNode.hpp"
 #include "InstrGroupNode.hpp"
-#include "../../vm/PropertyData.hpp"
+#include "../../vm/VM_Property.hpp"
 
 namespace hydro
 {
@@ -24,14 +24,14 @@ namespace hydro
 class PropertyNode : public BlockNode
 {
 private:
-	PropertyData *_property;
+	VM_Property *_property;
 
 public:
     InstrGroupNode *initValue{nullptr};
-	PropertyNode(PropertyData *property);
+	PropertyNode(VM_Property *property);
 	virtual ~PropertyNode();
 	virtual void build(Chunk *chunk);
-	PropertyData *property() const { return _property; }
+	VM_Property *property() const { return _property; }
 };
 
 } // namespace hydro

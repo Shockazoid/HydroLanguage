@@ -11,18 +11,18 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_MemberData__
-#define __h3o_MemberData__
+#ifndef __h3o_VM_Member__
+#define __h3o_VM_Member__
 
 namespace hydro
 {
 
-struct MemberData
+struct VM_Member
 {
 	class VM_Class *owner{nullptr};
-	virtual ~MemberData() {}
+	virtual ~VM_Member() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_MemberData__ */
+#endif /* __h3o_VM_Member__ */

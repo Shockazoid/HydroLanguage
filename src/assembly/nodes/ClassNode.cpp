@@ -12,7 +12,7 @@
 //
 
 #include "ClassNode.hpp"
-#include "MethodData.hpp"
+#include "VM_Method.hpp"
 #include "ConstructorNode.hpp"
 
 namespace hydro

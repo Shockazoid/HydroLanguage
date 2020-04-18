@@ -17,7 +17,7 @@
 namespace hydro
 {
 
-HMethod::HMethod(HvmEnv *env, HClass *methodClass, const MethodData *vmethod, HClass *ownerClass, function_glue *glue) : HObject{env, methodClass}, RuntimeContext{ownerClass}, _vmethod{vmethod}, _glue{glue} {}
+HMethod::HMethod(HvmEnv *env, HClass *methodClass, const VM_Method *vmethod, HClass *ownerClass, function_glue *glue) : HObject{env, methodClass}, RuntimeContext{ownerClass}, _vmethod{vmethod}, _glue{glue} {}
 
 HMethod::~HMethod() {}
 

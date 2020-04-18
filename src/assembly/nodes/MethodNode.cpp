@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-MethodNode::MethodNode(MethodData *method) : FuncNode{method}, _method{method} {}
+MethodNode::MethodNode(VM_Method *method) : FuncNode{method}, _method{method} {}
 
 MethodNode::~MethodNode() {}
 

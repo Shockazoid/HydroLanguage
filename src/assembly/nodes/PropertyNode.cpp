@@ -16,7 +16,7 @@
 namespace hydro
 {
 
-PropertyNode::PropertyNode(PropertyData *property) : _property{property} {}
+PropertyNode::PropertyNode(VM_Property *property) : _property{property} {}
 
 PropertyNode::~PropertyNode() {}
 

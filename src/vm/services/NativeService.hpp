@@ -99,7 +99,7 @@ private:
         return nullptr;
     }
 
-    property_glue *glue(const PropertyData *vproperty) const
+    property_glue *glue(const VM_Property *vproperty) const
     {
         if(is_native(vproperty->modifier))
         {
@@ -120,7 +120,7 @@ private:
 
     function_glue *glue(const GetterData *vgetter) const
     {
-        const PropertyData *vproperty = vgetter->property;
+        const VM_Property *vproperty = vgetter->property;
         
         if(is_native(vproperty->modifier))
         {
@@ -142,7 +142,7 @@ private:
 
     function_glue *glue(const SetterData *vsetter) const
     {
-        const PropertyData *vproperty = vsetter->property;
+        const VM_Property *vproperty = vsetter->property;
         
         if(is_native(vproperty->modifier))
         {
@@ -162,7 +162,7 @@ private:
         return nullptr;
     }
 
-    function_glue *glue(const MethodData *vmethod) const
+    function_glue *glue(const VM_Method *vmethod) const
     {
         if(is_native(vmethod->modifier))
         {

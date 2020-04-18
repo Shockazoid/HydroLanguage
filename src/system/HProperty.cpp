@@ -17,7 +17,7 @@
 namespace hydro
 {
 
-HProperty::HProperty(HvmEnv *env, HClass *packageClass, const PropertyData *vprop, HClass *ownerClass, property_glue *glue) : HObject{env, packageClass}, RuntimeContext{ownerClass}, _vprop{vprop}, _glue{glue}
+HProperty::HProperty(HvmEnv *env, HClass *packageClass, const VM_Property *vprop, HClass *ownerClass, property_glue *glue) : HObject{env, packageClass}, RuntimeContext{ownerClass}, _vprop{vprop}, _glue{glue}
 {
     // setup
     _getter = _vprop->getter ? _env->createGetter(_vprop->getter, this) : nullptr;
