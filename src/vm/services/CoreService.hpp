@@ -67,10 +67,10 @@ private:
     void setupCore();
     hobject loadDefinitionFromSdk(std::string assemblyName);
     hclass loadClassFromSdk(std::string assemblyName);
-    ClassData *loadReserved(std::string assemblyName) const;
-    hclass resolveAndRemoveReservedClass(const ClassData *reservedVclass) const;
-    hclass reserve(const ClassData *vclass);
-    hclass reserve(const ClassData *vclass, hclass superClass);
+    VM_Class *loadReserved(std::string assemblyName) const;
+    hclass resolveAndRemoveReservedClass(const VM_Class *reservedVclass) const;
+    hclass reserve(const VM_Class *vclass);
+    hclass reserve(const VM_Class *vclass, hclass superClass);
 
 public:
     CoreService(HvmEnv *env) : RuntimeService{env}, self{this} {}

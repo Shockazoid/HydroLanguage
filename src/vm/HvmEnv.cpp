@@ -13,7 +13,7 @@
 
 #include "HvmEnv.hpp"
 #include "HvmDelegate.hpp"
-#include "ClassData.hpp"
+#include "VM_Class.hpp"
 #include "FuncData.hpp"
 #include "../utility/classhelper.hpp"
 #include "../system/HConstructor.hpp"
@@ -278,7 +278,7 @@ void HvmEnv::setup(HvmInitOptions *options)
     _coreService->setupCore();
 }
 
-hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const ClassData *vclass)
+hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Class *vclass)
 {
     if(hvalue result = hvalue{runtime->find(vclass->name)})
         return result;
@@ -318,7 +318,7 @@ hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const EventData *veven
     return e;
 }
 
-Closure *HvmEnv::createClosure(const ClassData *clss)
+Closure *HvmEnv::createClosure(const VM_Class *clss)
 {
     Closure *closure = new Closure{};
     closure->data = clss;
@@ -377,7 +377,7 @@ hetype HvmEnv::createEtype(const EtypeData *vetype, hevent event)
     return new HEventType{this, _coreService->EtypeClass(), vetype, event};
 }
 
-hclass HvmEnv::makeClass(const ClassData *vclass)
+hclass HvmEnv::makeClass(const VM_Class *vclass)
 {
     ClassAllocator *allocator;
     

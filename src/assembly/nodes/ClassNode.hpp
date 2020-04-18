@@ -18,7 +18,7 @@
 #include "PropertyNode.hpp"
 #include "MethodNode.hpp"
 #include "../../vm/Chunk.hpp"
-#include "../../vm/ClassData.hpp"
+#include "../../vm/VM_Class.hpp"
 #include "../../vm/Runtime.hpp"
 
 namespace hydro
@@ -28,20 +28,20 @@ class ClassNode : public BlockNode
 {
 private:
 	Chunk *_chunk;
-	ClassData *_vclass;
+	VM_Class *_vclass;
 	std::string _super;
 	std::vector<H3oNode *> _fields;
     class ConstructorNode *_construct;
     
 public:
-    ClassNode(Chunk *chunk, ClassData *vclass, std::string superClassName = "");
+    ClassNode(Chunk *chunk, VM_Class *vclass, std::string superClassName = "");
 	virtual ~ClassNode();
 	virtual void build(Chunk *chunk) override;
 	void addProperty(PropertyNode *prop);
 	void addMethod(MethodNode *meth);
     void setConstructor(ConstructorNode *construct);
     ConstructorNode *getConstructor() const { return _construct; }
-	ClassData *vclass() const { return _vclass; }
+	VM_Class *vclass() const { return _vclass; }
     std::string superClassName() const { return _super; }
 };
 

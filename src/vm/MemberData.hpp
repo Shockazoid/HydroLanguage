@@ -19,7 +19,7 @@ namespace hydro
 
 struct MemberData
 {
-	class ClassData *owner{nullptr};
+	class VM_Class *owner{nullptr};
 	virtual ~MemberData() {}
 };
 

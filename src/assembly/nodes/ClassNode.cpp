@@ -18,7 +18,7 @@
 namespace hydro
 {
 
-ClassNode::ClassNode(Chunk *chunk, ClassData *vclass, std::string superClassName) : _chunk{chunk}, _vclass{vclass}, _super{superClassName}, _fields{}, _construct{nullptr} {}
+ClassNode::ClassNode(Chunk *chunk, VM_Class *vclass, std::string superClassName) : _chunk{chunk}, _vclass{vclass}, _super{superClassName}, _fields{}, _construct{nullptr} {}
 
 ClassNode::~ClassNode() {}
 

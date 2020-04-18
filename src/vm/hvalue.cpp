@@ -1704,7 +1704,7 @@ bool is_const_function(const hvalue &o)
 
 bool is_const_class(const hvalue &o)
 {
-    return o.type() == typeid(ClassData *);
+    return o.type() == typeid(VM_Class *);
 }
 
 bool is_callable(const hvalue &o)

@@ -30,127 +30,127 @@ void CoreService::setupCore()
      */
     
     // system/Object
-    ClassData *vobject = new ClassData{};
+    VM_Class *vobject = new VM_Class{};
     vobject->base = nullptr;       // cannot have a base class
     vobject->name = "system/Object"; // @system::Object
     vobject->modifier = mod_public | mod_dynamic;
 
     // system/Class
-    ClassData *vclass = new ClassData{};
+    VM_Class *vclass = new VM_Class{};
     vclass->base = vobject;
     vclass->name = "system/Class"; // @system::Class
     vclass->modifier = mod_public | mod_final | mod_native;
 
     // system/HString
-    ClassData *vstring = new ClassData{};
+    VM_Class *vstring = new VM_Class{};
     vstring->base = vobject;
     vstring->name = "system/String";
     vstring->modifier = mod_public | mod_final | mod_native;
 
     // system/Function
-    ClassData *vfunc = new ClassData{};
+    VM_Class *vfunc = new VM_Class{};
     vfunc->base = vobject;
     vfunc->name = "system/Function";
     vfunc->modifier = mod_public | mod_final | mod_native;
     
     // system/Action
-    ClassData *vact = new ClassData{};
+    VM_Class *vact = new VM_Class{};
     vact->base = vobject;
     vact->name = "system/Action";
     vact->modifier = mod_public | mod_final | mod_native;
     
     // system/List
-    ClassData *vlist = new ClassData{};
+    VM_Class *vlist = new VM_Class{};
     vlist->base = vobject;
     vlist->name = "system/List";
     vlist->modifier = mod_public | mod_final | mod_native;
 
     // system/Dictionary
-    ClassData *vdict = new ClassData{};
+    VM_Class *vdict = new VM_Class{};
     vdict->base = vobject;
     vdict->name = "system/Dictionary";
     vdict->modifier = mod_public | mod_final | mod_native;
 
     // system/Json
-    ClassData *vjson = new ClassData{};
+    VM_Class *vjson = new VM_Class{};
     vjson->base = vobject;
     vjson->name = "system/Json";
     vjson->modifier = mod_public | mod_final | mod_native;
 
     // system/Xml
-    ClassData *vxml = new ClassData{};
+    VM_Class *vxml = new VM_Class{};
     vxml->base = vobject;
     vxml->name = "system/Xml";
     vxml->modifier = mod_public | mod_final | mod_native;
 
     // system/Regex
-    ClassData *vregex = new ClassData{};
+    VM_Class *vregex = new VM_Class{};
     vregex->base = vobject;
     vregex->name = "system/Regex";
     vregex->modifier = mod_public | mod_native;
     
     // system/Date
-    ClassData *vdate = new ClassData{};
+    VM_Class *vdate = new VM_Class{};
     vregex->base = vobject;
     vregex->name = "system/Date";
     vregex->modifier = mod_public | mod_native;
     
     // system/Constructor
-    ClassData *vconstructor = new ClassData{};
+    VM_Class *vconstructor = new VM_Class{};
     vconstructor->base = vobject;
     vconstructor->name = "system/Constructor";
     vconstructor->modifier = mod_public | mod_final | mod_native;
     
     // system/Method
-    ClassData *vmethod = new ClassData{};
+    VM_Class *vmethod = new VM_Class{};
     vmethod->base = vobject;
     vmethod->name = "system/Method";
     vmethod->modifier = mod_public | mod_final | mod_native;
     
     // system/Property
-    ClassData *vproperty = new ClassData{};
+    VM_Class *vproperty = new VM_Class{};
     vproperty->base = vobject;
     vproperty->name = "system/Property";
     vproperty->modifier = mod_public | mod_final | mod_native;
     
     // system/Getter
-    ClassData *vgetter = new ClassData{};
+    VM_Class *vgetter = new VM_Class{};
     vgetter->base = vobject;
     vgetter->name = "system/Getter";
     vgetter->modifier = mod_public | mod_final | mod_native;
 
     // system/Setter
-    ClassData *vsetter = new ClassData{};
+    VM_Class *vsetter = new VM_Class{};
     vsetter->base = vobject;
     vsetter->name = "system/Getter";
     vsetter->modifier = mod_public | mod_final | mod_native;
     
     // system/Thread
-    ClassData *vthread = new ClassData{};
+    VM_Class *vthread = new VM_Class{};
     vthread->base = vobject;
     vthread->name = "system/Thread";
     vthread->modifier = mod_public | mod_native;
     
     // system/Context
-    ClassData *vcontext = new ClassData{};
+    VM_Class *vcontext = new VM_Class{};
     vcontext->base = vobject;
     vcontext->name = "system/Context";
     vcontext->modifier = mod_public | mod_native;
     
     // system/EventContext
-    ClassData *vevent = new ClassData{};
+    VM_Class *vevent = new VM_Class{};
     vevent->base = vobject;
     vevent->name = "system/EventContext";
     vevent->modifier = mod_public | mod_native | mod_final;
     
     // system/EventType
-    ClassData *vetype = new ClassData{};
+    VM_Class *vetype = new VM_Class{};
     vetype->base = vobject;
     vetype->name = "system/EventContext";
     vetype->modifier = mod_public | mod_native | mod_final;
     
     // system/Interface
-    ClassData *vinterface = new ClassData{};
+    VM_Class *vinterface = new VM_Class{};
     vinterface->base = vobject;
     vinterface->name = "system/Interface";
     vinterface->modifier = mod_public | mod_native | mod_final;
@@ -397,17 +397,17 @@ hclass CoreService::loadClassFromSdk(std::string assemblyName)
     return nullptr;
 }
 
-ClassData *CoreService::loadReserved(std::string assemblyName) const
+VM_Class *CoreService::loadReserved(std::string assemblyName) const
 {
     for(HClass *c : _reserved)
         if(c->_vclass->name == assemblyName)
-            return const_cast<ClassData *>(c->_vclass);
+            return const_cast<VM_Class *>(c->_vclass);
     
     // fail
     return nullptr;
 }
 
-hclass CoreService::resolveAndRemoveReservedClass(const ClassData *reservedVclass) const
+hclass CoreService::resolveAndRemoveReservedClass(const VM_Class *reservedVclass) const
 {
     for(HClass *c : _reserved)
     {
@@ -435,7 +435,7 @@ hclass CoreService::resolveAndRemoveReservedClass(const ClassData *reservedVclas
     return nullptr;
 }
 
-hclass CoreService::reserve(const ClassData *vclass)
+hclass CoreService::reserve(const VM_Class *vclass)
 {
     std::string package = get_package_name(vclass->name);
     HClass *clss = new HClass{_env, vclass};
@@ -443,7 +443,7 @@ hclass CoreService::reserve(const ClassData *vclass)
     return clss;
 }
 
-hclass CoreService::reserve(const ClassData *vclass, hclass superClass)
+hclass CoreService::reserve(const VM_Class *vclass, hclass superClass)
 {
     std::string package = get_package_name(vclass->name);
     HClass *clss = new HClass{_env, _ClassClass, vclass}; // late initialization constructor

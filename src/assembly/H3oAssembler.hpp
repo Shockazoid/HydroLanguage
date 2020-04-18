@@ -85,7 +85,7 @@ private:
 	BlockNode *topNode() { return _stack.top(); }
 	void addSlot(LocalVar *var);
 	void addSlot(FuncData *func);
-	void addSlot(ClassData *clss);
+	void addSlot(VM_Class *clss);
     FuncNode *getEnclosingFunc();
     EventNode *getContextParent();
     EventNode *getEventParent();

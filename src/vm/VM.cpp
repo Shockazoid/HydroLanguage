@@ -426,7 +426,7 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             else if (is_const_class(a))
             {
                 // closure is a class
-                opush(currentFrame, _env->makeClass((const ClassData *)a));
+                opush(currentFrame, _env->makeClass((const VM_Class *)a));
             }
 			else
 			{
@@ -1235,7 +1235,7 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                 FuncData *vfunc = a; // cast
                 currentFrame->locals->define(vfunc, _env->createFunction(vfunc));
             }
-            else if(a.type() == typeid(ClassData *))
+            else if(a.type() == typeid(VM_Class *))
             {
                 //VM_Class *vclass = a; // cast
                 runtimeError(cxt, "Local classes are not yet supported.");

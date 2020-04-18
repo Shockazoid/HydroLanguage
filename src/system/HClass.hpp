@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "HObject.hpp"
-#include "../vm/ClassData.hpp"
+#include "../vm/VM_Class.hpp"
 #include "../utility/classhelper.hpp"
 #include "../vm/RuntimeContext.hpp"
 #include "../vm/ClassAllocator.hpp"
@@ -41,7 +41,7 @@ class HClass final : public HObject, public RuntimeContext
     friend struct CoreService;
     
 private:
-	const ClassData *_vclass;
+	const VM_Class *_vclass;
 	HClass *_superClass;
 	HConstructor *_constructor;
 	RuntimeContext **_fields;
@@ -53,13 +53,13 @@ private:
     std::string _packageName;
 
 	// reserved for the system::Class class
-	HClass(class HvmEnv *env, const ClassData *vclass, ClassAllocator *allocator = nullptr);
+	HClass(class HvmEnv *env, const VM_Class *vclass, ClassAllocator *allocator = nullptr);
 
 	// reserved for core classes that initialized before HVM run-time (i.e., system::Object, system::Class, system::String, system::List, .etc)
-	HClass(HvmEnv *env, HClass *classClass, const ClassData *vclass, ClassAllocator *allocator = nullptr);
+	HClass(HvmEnv *env, HClass *classClass, const VM_Class *vclass, ClassAllocator *allocator = nullptr);
 
 	// used for all other runtime classes
-	HClass(HvmEnv *env, HClass *classClass, const ClassData *vclass, HClass *superClass, ClassAllocator *allocator = nullptr);
+	HClass(HvmEnv *env, HClass *classClass, const VM_Class *vclass, HClass *superClass, ClassAllocator *allocator = nullptr);
     
     void setup();
     HObject *alloc();
@@ -70,7 +70,7 @@ public:
 	virtual ~HClass();
     HObject *create();
 	RuntimeContext *lookup(std::string name) const;
-	const ClassData *vclass() const { return _vclass; }
+	const VM_Class *vclass() const { return _vclass; }
 	HClass *superClass() const { return _superClass; }
     ClassAllocator *allocator() const { return _allocator; }
 	HConstructor *constructor() const { return _constructor; }

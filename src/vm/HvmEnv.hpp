@@ -252,13 +252,13 @@ public:
         
         void initCore();
         
-        const ClassData *findClass(std::string);
+        const VM_Class *findClass(std::string);
         
-        Closure *createClosure(const ClassData *vclass);
+        Closure *createClosure(const VM_Class *vclass);
         
         Closure *createClosure(const FuncData *vfunc);
         
-        hvalue createAndBindIfNotExists(Runtime *runtime, const ClassData *vclass);
+        hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Class *vclass);
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const FuncData *vfunc);
         
@@ -276,7 +276,7 @@ public:
         
         hfunction bindMethod(hmethod method, HObject *instance);
             
-        hclass makeClass(const ClassData *vclass);
+        hclass makeClass(const VM_Class *vclass);
         
         hconstructor createConstructor(const ConstructorData *vconstruct, hclass ownerClass);
 

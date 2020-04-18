@@ -45,7 +45,7 @@ private:
         }
     }
 
-    ClassAllocator *allocator(const ClassData *vclass) const
+    ClassAllocator *allocator(const VM_Class *vclass) const
     {
         if(is_native(vclass->modifier))
         {

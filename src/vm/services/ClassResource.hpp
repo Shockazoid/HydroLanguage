@@ -27,7 +27,7 @@ namespace hydro
 {
 
 class HvmEnv;
-struct ClassData;
+struct VM_Class;
 
 template <typename ClassType>
 class ClassResource : public NativeClassResource

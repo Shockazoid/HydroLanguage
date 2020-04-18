@@ -27,7 +27,7 @@ class HvmEnv;
 class VM;
 class hvalue;
 class HObjectContext;
-struct ClassData;
+struct VM_Class;
 class HClass;
 class HvmContext;
 class hydro_property;

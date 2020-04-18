@@ -196,7 +196,7 @@ void H3oAssembler::addSlot(FuncData *func)
 	_stack.top()->addSlot(func);
 }
 
-void H3oAssembler::addSlot(ClassData *clss)
+void H3oAssembler::addSlot(VM_Class *clss)
 {
 	if (_stack.empty())
 		return;
@@ -1549,7 +1549,7 @@ void H3oAssembler::parseNext()
             }
         }
         
-        ClassData *clss;
+        VM_Class *clss;
         clss = _env->core()->loadReserved(qname);
         if(clss)
         {
@@ -1560,7 +1560,7 @@ void H3oAssembler::parseNext()
         else
         {
             // create class data
-            clss = new ClassData{};
+            clss = new VM_Class{};
         }
         
 		clss->name = qname;
@@ -2130,7 +2130,7 @@ void H3oAssembler::buildClass(ClassNode *classNode, std::list<ClassNode *> &visi
         if(v == classNode)
             return; // skip (already handled)
     
-    ClassData *vclass = classNode->vclass();
+    VM_Class *vclass = classNode->vclass();
     visited.push_back(classNode);
 
     if(_runtime->find(vclass->name))

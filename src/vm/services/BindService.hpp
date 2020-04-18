@@ -37,7 +37,7 @@ private:
 public:
     BindService(HvmEnv *env) : RuntimeService{env} {}
     virtual ~BindService() {}
-    hvalue ifNotExists(Runtime *runtime, const ClassData *vclass) const;
+    hvalue ifNotExists(Runtime *runtime, const VM_Class *vclass) const;
     hvalue ifNotExists(Runtime *runtime, const FuncData *vfunc) const;
     hvalue ifNotExists(Runtime *runtime, const VM_Action *vact) const;
     hvalue ifNotExists(Runtime *runtime, const EventData *vevent) const;

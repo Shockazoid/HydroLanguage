@@ -20,17 +20,17 @@
 namespace hydro
 {
 
-HClass::HClass(class HvmEnv *env, const ClassData *vclass, ClassAllocator *allocator) : _fields{new RuntimeContext *[0]}, _vclass{vclass}, RuntimeContext{get_package_name(vclass->name)}, _superClass{nullptr}, HObject{env, this, this}, _allocator{allocator}, _constructor{nullptr}
+HClass::HClass(class HvmEnv *env, const VM_Class *vclass, ClassAllocator *allocator) : _fields{new RuntimeContext *[0]}, _vclass{vclass}, RuntimeContext{get_package_name(vclass->name)}, _superClass{nullptr}, HObject{env, this, this}, _allocator{allocator}, _constructor{nullptr}
 {
     // late initialization will be applied by HvmEnv
 }
 
-HClass::HClass(class HvmEnv *env, HClass *classHClass, const ClassData *vclass, ClassAllocator *allocator) : HObject{env, classHClass, this}, RuntimeContext{get_package_name(vclass->name)}, _vclass{vclass}, _superClass{nullptr}, _allocator{allocator}, _constructor{nullptr}
+HClass::HClass(class HvmEnv *env, HClass *classHClass, const VM_Class *vclass, ClassAllocator *allocator) : HObject{env, classHClass, this}, RuntimeContext{get_package_name(vclass->name)}, _vclass{vclass}, _superClass{nullptr}, _allocator{allocator}, _constructor{nullptr}
 {
     // late initialization will be applied by HvmEnv
 }
 
-HClass::HClass(HvmEnv *env, HClass *classClass, const ClassData *vclass, HClass *superClass, ClassAllocator *allocator) : HObject{env, classClass, this}, RuntimeContext{get_package_name(vclass->name)}, _vclass{vclass}, _superClass{superClass}, _allocator{allocator}, _constructor{nullptr}
+HClass::HClass(HvmEnv *env, HClass *classClass, const VM_Class *vclass, HClass *superClass, ClassAllocator *allocator) : HObject{env, classClass, this}, RuntimeContext{get_package_name(vclass->name)}, _vclass{vclass}, _superClass{superClass}, _allocator{allocator}, _constructor{nullptr}
 {
     setup();
 }

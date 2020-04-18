@@ -21,7 +21,7 @@
 #include "Value.hpp"
 #include "LocalVar.hpp"
 #include "FuncData.hpp"
-#include "ClassData.hpp"
+#include "VM_Class.hpp"
 
 namespace hydro
 {

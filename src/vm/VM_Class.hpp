@@ -11,8 +11,8 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_ClassData__
-#define __h3o_ClassData__
+#ifndef __h3o_VM_Class__
+#define __h3o_VM_Class__
 
 #include <string>
 #include <cstdlib>
@@ -24,18 +24,18 @@
 namespace hydro
 {
 
-struct ClassData : public VMObject
+struct VM_Class : public VMObject
 {
     Chunk *chunk;
-	const ClassData *base{nullptr};
+	const VM_Class *base{nullptr};
 	uint16_t nfields;
     uint16_t nstatic;
 	uint16_t ninstance;
 	VMObject **fields;
 	struct ConstructorData *construct;
-	virtual ~ClassData() {}
+	virtual ~VM_Class() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_ClassData__ */
+#endif /* __h3o_VM_Class__ */

@@ -23,7 +23,7 @@ Closure *BindService::createClosure(const VMObject *data) const
     return closure;
 }
 /*
-hvalue BindService::ifNotExists(Runtime *runtime, const ClassData *vclass) const
+hvalue BindService::ifNotExists(Runtime *runtime, const VM_Class *vclass) const
 {
     if(hvalue result = hvalue{runtime->find(vclass->name)})
         return result;
@@ -109,7 +109,7 @@ hetype BindService::createEtype(const EtypeData *vetype, hevent event)
     return new EventType{this, _coreService->EtypeClass(), vetype, event};
 }
 
-hclass BindService::makeClass(const ClassData *vclass)
+hclass BindService::makeClass(const VM_Class *vclass)
 {
     ClassAllocator *allocator;
     

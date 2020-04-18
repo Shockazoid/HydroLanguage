@@ -51,7 +51,7 @@ void HObjectContext::setup()
     
     std::stack<HClass *> classTree; // class hierarchy
     HClass *c = _rclass;
-    const ClassData *vclass;
+    const VM_Class *vclass;
     
     while (c)
     {
