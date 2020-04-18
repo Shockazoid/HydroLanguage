@@ -63,7 +63,7 @@ private:
         return nullptr;
     }
 
-    function_glue *glue(const FuncData *vfunc) const
+    function_glue *glue(const VM_Func *vfunc) const
     {
         if(is_native(vfunc->modifier))
         {

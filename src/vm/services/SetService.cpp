@@ -20,7 +20,7 @@ namespace hydro
 void SetService::globalFn(std::string name, function_glue *glue) const
 {
     // create function data
-    FuncData *vfunc = new FuncData{};
+    VM_Func *vfunc = new VM_Func{};
     vfunc->name = "";                   // anonymous
     vfunc->package = "";               // not applicable
     vfunc->startAddr = vfunc->endAddr = 0; // not applicable

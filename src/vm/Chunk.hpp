@@ -28,7 +28,7 @@ struct Chunk
 	hvalue *constPool{nullptr};
 	//class MemorySpace *globals{nullptr};
 	class Runtime *runtime{nullptr};
-	class FuncData *main{nullptr};
+	class VM_Func *main{nullptr};
 #ifdef HVM_DEBUG
 	uint32_t *lines{nullptr};
 #endif /* HVM_DEBUG */

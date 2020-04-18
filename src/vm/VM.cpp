@@ -421,7 +421,7 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             if (is_const_function(a))
             {
                 // closure is a function
-                opush(currentFrame, _env->createFunction((const FuncData *)a));
+                opush(currentFrame, _env->createFunction((const VM_Func *)a));
             }
             else if (is_const_class(a))
             {
@@ -1230,9 +1230,9 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
                 VM_Action *vact = a; // cast
                 currentFrame->locals->define(vact, _env->createAction(vact));
             }
-            else if(a.type() == typeid(FuncData *))
+            else if(a.type() == typeid(VM_Func *))
             {
-                FuncData *vfunc = a; // cast
+                VM_Func *vfunc = a; // cast
                 currentFrame->locals->define(vfunc, _env->createFunction(vfunc));
             }
             else if(a.type() == typeid(VM_Class *))
@@ -1541,7 +1541,7 @@ void VM::trigger(HvmContext *threadContext, hvalue triggerable, std::map<std::st
 CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
 {
 	// function (or callable)
-    const FuncData *data = dynamic_cast<const FuncData *>(closure->data);
+    const VM_Func *data = dynamic_cast<const VM_Func *>(closure->data);
 
 	if (!data)
     {
@@ -1734,7 +1734,7 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
 CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &map, std::list<hvalue> &args, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
 {
     // function (or callable)
-    const FuncData *data = dynamic_cast<const FuncData *>(closure->data);
+    const VM_Func *data = dynamic_cast<const VM_Func *>(closure->data);
 
     if (!data)
     {
@@ -1985,7 +1985,7 @@ bool VM::exec(HvmContext *cxt, Chunk *chunk, hvalue &result, MemorySpace *scopeT
 	if (!scopeToUse)
 		scopeToUse = _globals; // use globals
 
-	FuncData *main = chunk->main;
+	VM_Func *main = chunk->main;
 	std::list<hvalue> args{};
     
     // create main function
@@ -2026,7 +2026,7 @@ bool VM::invokeHydroFunc(HvmContext *threadContext, RuntimeContext *callingConte
 	// perform critical procedures for vm call
 	CallFrame *frame = prepVmCall(threadContext, callingContext, closure, args, nullptr, thisObject);
 
-	const FuncData *data = static_cast<const FuncData *>(closure->data);
+	const VM_Func *data = static_cast<const VM_Func *>(closure->data);
 
 	// execute
 	return cpu(threadContext, data->chunk, frame, result);
@@ -2038,7 +2038,7 @@ bool VM::invokeHydroFunc(HvmContext *threadContext, RuntimeContext *callingConte
     std::list<hvalue> argList;
     CallFrame *frame = prepVmCall(threadContext, callingContext, closure, args, argList, nullptr, thisObject);
 
-    const FuncData *data = static_cast<const FuncData *>(closure->data);
+    const VM_Func *data = static_cast<const VM_Func *>(closure->data);
 
     // execute
     return cpu(threadContext, data->chunk, frame, result);

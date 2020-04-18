@@ -19,7 +19,7 @@
 #include <vector>
 
 #include "Chunk.hpp"
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "Closure.hpp"
 #include "RuntimeContext.hpp"
 #include "VMContext.hpp"
@@ -33,7 +33,7 @@ struct CallFrame
 	CallFrame *parentFrame{nullptr};
 	Closure *closure{nullptr};
     VMContext *context{nullptr};
-	const FuncData *data{nullptr};
+	const VM_Func *data{nullptr};
     RuntimeContext *callee;
 	MemorySpace *locals;
 	uint32_t returnAddr;

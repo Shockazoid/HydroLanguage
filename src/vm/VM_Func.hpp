@@ -11,8 +11,8 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_FuncData__
-#define __h3o_FuncData__
+#ifndef __h3o_VM_Func__
+#define __h3o_VM_Func__
 
 #include <list>
 #include <cstdlib>
@@ -26,7 +26,7 @@
 namespace hydro
 {
 
-struct FuncData : public VMObject
+struct VM_Func : public VMObject
 {
 	Chunk *chunk{nullptr};
 	std::string package{};
@@ -42,9 +42,9 @@ struct FuncData : public VMObject
     ErrorHandler **errorHandlers{nullptr};
 	bool variadic{false};
     bool nativeBound{false};
-	virtual ~FuncData() {}
+	virtual ~VM_Func() {}
 };
 
 } // namespace hydro
 
-#endif /* __h3o_FuncData__ */
+#endif /* __h3o_VM_Func__ */

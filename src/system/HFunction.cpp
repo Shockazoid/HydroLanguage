@@ -17,7 +17,7 @@
 namespace hydro
 {
 
-HFunction::HFunction(HvmEnv *env, hclass functionClass, const FuncData *vfunc, function_glue *glue, std::string ownerPackage, hvalue thisObject) : HObject{env, functionClass}, RuntimeContext{ownerPackage}, _vfunc{vfunc}, _glue{glue}, _thisObject{thisObject}
+HFunction::HFunction(HvmEnv *env, hclass functionClass, const VM_Func *vfunc, function_glue *glue, std::string ownerPackage, hvalue thisObject) : HObject{env, functionClass}, RuntimeContext{ownerPackage}, _vfunc{vfunc}, _glue{glue}, _thisObject{thisObject}
 { 
 }
 

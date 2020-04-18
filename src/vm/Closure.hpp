@@ -14,7 +14,7 @@
 #ifndef __h3o_Closure__
 #define __h3o_Closure__
 
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "Upvalue.hpp"
 #include "MemorySpace.hpp"
 

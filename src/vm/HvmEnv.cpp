@@ -13,7 +13,7 @@
 
 #include "HvmEnv.hpp"
 #include "VM_Class.hpp"
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "../utility/classhelper.hpp"
 #include "../system/HConstructor.hpp"
 #include "../system/HProperty.hpp"
@@ -285,7 +285,7 @@ hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Class *vclass
     return cls;
 }
 
-hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const FuncData *vfunc)
+hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Func *vfunc)
 {
     if(hvalue result = hvalue{runtime->find(vfunc->name)})
         return result;
@@ -322,14 +322,14 @@ Closure *HvmEnv::createClosure(const VM_Class *clss)
     return closure;
 }
 
-Closure *HvmEnv::createClosure(const FuncData *vfunc)
+Closure *HvmEnv::createClosure(const VM_Func *vfunc)
 {
     Closure *closure = new Closure{};
     closure->data = vfunc;
     return closure;
 }
 
-hfunction HvmEnv::createFunction(const FuncData *vfunc)
+hfunction HvmEnv::createFunction(const VM_Func *vfunc)
 {
     function_glue *glue;
     

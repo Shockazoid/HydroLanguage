@@ -188,7 +188,7 @@ void H3oAssembler::addSlot(LocalVar *var)
 	getEnclosingFunc()->addSlot(var);
 }
 
-void H3oAssembler::addSlot(FuncData *func)
+void H3oAssembler::addSlot(VM_Func *func)
 {
 	if (_stack.empty())
 		return;
@@ -1072,7 +1072,7 @@ void H3oAssembler::parseBody(BlockNode *node, bool isDecl)
 void H3oAssembler::parseArg(FuncNode *node)
 {
     validate(".arg");
-    FuncData *func = node->func();
+    VM_Func *func = node->func();
 
     // variadic ?
     if (matchNext("$"))
@@ -1232,7 +1232,7 @@ void H3oAssembler::parseNext()
 		advance(); // to expected return type
 		type = parseTypeSpec();
 
-		FuncData *func = new FuncData{};
+		VM_Func *func = new VM_Func{};
 		func->chunk = _result;
 		func->name = qname; // might be anonymous
 		func->modifier = mod;
@@ -2092,7 +2092,7 @@ void H3oAssembler::onParseInit()
 	_result->runtime = _runtime;
 
 	// create main function
-	_mainFunc = new FuncData{};
+	_mainFunc = new VM_Func{};
 	_mainFunc->chunk = _result;
 	_mainFunc->package = "";
 	_mainFunc->name = "";					   // anonymous

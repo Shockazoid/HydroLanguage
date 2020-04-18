@@ -37,7 +37,7 @@ void FuncArgNode::build(Chunk *chunk)
 	}
 }
 
-FuncNode::FuncNode(FuncData *func) : BlockNode{}, _func{func}, _args{} {}
+FuncNode::FuncNode(VM_Func *func) : BlockNode{}, _func{func}, _args{} {}
 
 FuncNode::~FuncNode() { _args.clear(); }
 

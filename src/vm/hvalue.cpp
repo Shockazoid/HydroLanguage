@@ -1699,7 +1699,7 @@ hlist is_list(const hvalue &o)
 
 bool is_const_function(const hvalue &o)
 {
-    return o.type() == typeid(FuncData *);
+    return o.type() == typeid(VM_Func *);
 }
 
 bool is_const_class(const hvalue &o)

@@ -14,13 +14,13 @@
 #ifndef __h3o_MethodData__
 #define __h3o_MethodData__
 
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "MemberData.hpp"
 
 namespace hydro
 {
 
-struct MethodData : public FuncData, public MemberData
+struct MethodData : public VM_Func, public MemberData
 {
 	virtual ~MethodData() {}
 };

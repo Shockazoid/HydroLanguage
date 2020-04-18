@@ -15,7 +15,7 @@
 #define __h3o_FuncNode__
 
 #include "InstrGroupNode.hpp"
-#include "../../vm/FuncData.hpp"
+#include "../../vm/VM_Func.hpp"
 
 namespace hydro
 {
@@ -36,17 +36,17 @@ public:
 class FuncNode : public BlockNode
 {
 protected:
-	FuncData *_func;
+	VM_Func *_func;
 	std::vector<FuncArgNode *> _args;
     std::vector<class TryNode *> _errorHandlers;
     
 public:
-	FuncNode(FuncData *func);
+	FuncNode(VM_Func *func);
 	virtual ~FuncNode();
 	void appendArg(FuncArgNode *arg);
     void appendTry(TryNode *tryCatch);
 	virtual void build(Chunk *chunk) override;
-	FuncData *func() const { return _func; }
+	VM_Func *func() const { return _func; }
 };
 
 } // namespace hydro

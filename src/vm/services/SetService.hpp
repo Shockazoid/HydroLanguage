@@ -19,7 +19,7 @@
 
 #include "RuntimeService.hpp"
 #include "../hvalue.hpp"
-#include "../FuncData.hpp"
+#include "../VM_Func.hpp"
 #include "../glue.hpp"
 #include "../../system/HObject.hpp"
 #include "../../system/HFunction.hpp"

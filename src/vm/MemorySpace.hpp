@@ -20,7 +20,7 @@
 #include "VMObject.hpp"
 #include "Value.hpp"
 #include "LocalVar.hpp"
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "VM_Class.hpp"
 
 namespace hydro
@@ -37,7 +37,7 @@ protected:
 public:
 	Value **slots;
 	MemorySpace(MemorySpace *parent = nullptr);
-	MemorySpace(const FuncData *data, MemorySpace *parent = nullptr);
+	MemorySpace(const VM_Func *data, MemorySpace *parent = nullptr);
 	~MemorySpace();
 	void define(const VMObject *data, hvalue value = undefined);
 	bool exists(std::string name) const;

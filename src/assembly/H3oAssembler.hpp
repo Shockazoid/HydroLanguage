@@ -20,7 +20,7 @@
 #include "../parser/BytecodeAssembler.hpp"
 #include "../parser/HydroCompiler.hpp"
 #include "../vm/Chunk.hpp"
-#include "../vm/FuncData.hpp"
+#include "../vm/VM_Func.hpp"
 #include "../vm/TypeSpecifier.hpp"
 #include "../vm/NilTypeSpecifier.hpp"
 #include "../vm/opcodes.hpp"
@@ -68,7 +68,7 @@ class H3oAssembler : public BytecodeAssembler
 {
 private:
 	Chunk *_result;
-	FuncData *_mainFunc;
+	VM_Func *_mainFunc;
 	FuncNode *_mainNode;
 	std::vector<std::string> _names;
 	std::vector<hvalue> _constPool;
@@ -84,7 +84,7 @@ private:
 	void pop();
 	BlockNode *topNode() { return _stack.top(); }
 	void addSlot(LocalVar *var);
-	void addSlot(FuncData *func);
+	void addSlot(VM_Func *func);
 	void addSlot(VM_Class *clss);
     FuncNode *getEnclosingFunc();
     EventNode *getContextParent();

@@ -20,7 +20,7 @@
 #include <map>
 
 #include "CallFrame.hpp"
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "VM_Constructor.hpp"
 #include "PropertyData.hpp"
 #include "MethodData.hpp"

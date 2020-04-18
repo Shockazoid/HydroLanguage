@@ -23,7 +23,7 @@ MemorySpace::MemorySpace(MemorySpace *parent) : _parent{parent}
 	assert(slots);
 }
 
-MemorySpace::MemorySpace(const FuncData *func, MemorySpace *parent) : _parent{parent}
+MemorySpace::MemorySpace(const VM_Func *func, MemorySpace *parent) : _parent{parent}
 {
 	uint32_t i, j;
 	Value *value;

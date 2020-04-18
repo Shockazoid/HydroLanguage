@@ -253,17 +253,17 @@ public:
         
         Closure *createClosure(const VM_Class *vclass);
         
-        Closure *createClosure(const FuncData *vfunc);
+        Closure *createClosure(const VM_Func *vfunc);
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Class *vclass);
         
-        hvalue createAndBindIfNotExists(Runtime *runtime, const FuncData *vfunc);
+        hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Func *vfunc);
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Action *vact);
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Event *vevent);
         
-        hfunction createFunction(const FuncData *vfunc);
+        hfunction createFunction(const VM_Func *vfunc);
         
         haction createAction(const VM_Action *vact);
         

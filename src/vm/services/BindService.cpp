@@ -33,7 +33,7 @@ hvalue BindService::ifNotExists(Runtime *runtime, const VM_Class *vclass) const
     return cls;
 }
 
-hvalue BindService::ifNotExists(Runtime *runtime, const FuncData *vfunc) const
+hvalue BindService::ifNotExists(Runtime *runtime, const VM_Func *vfunc) const
 {
     if(hvalue result = hvalue{runtime->find(vfunc->name)})
         return result;
@@ -64,7 +64,7 @@ hvalue BindService::ifNotExists(Runtime *runtime, const VM_Event *vevent) const
 }
 */
 /*
-hfunction BindService::createFunction(const FuncData *vfunc)
+hfunction BindService::createFunction(const VM_Func *vfunc)
 {
     function_glue *glue;
     

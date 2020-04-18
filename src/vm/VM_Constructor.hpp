@@ -14,13 +14,13 @@
 #ifndef __h3o_VM_Constructor__
 #define __h3o_VM_Constructor__
 
-#include "FuncData.hpp"
+#include "VM_Func.hpp"
 #include "MemberData.hpp"
 
 namespace hydro
 {
 
-struct VM_Constructor : public FuncData, public MemberData
+struct VM_Constructor : public VM_Func, public MemberData
 {
 	virtual ~VM_Constructor() {}
 };
