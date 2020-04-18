@@ -39,7 +39,7 @@ public:
     virtual ~BindService() {}
     hvalue ifNotExists(Runtime *runtime, const ClassData *vclass) const;
     hvalue ifNotExists(Runtime *runtime, const FuncData *vfunc) const;
-    hvalue ifNotExists(Runtime *runtime, const ActionData *vact) const;
+    hvalue ifNotExists(Runtime *runtime, const VM_Action *vact) const;
     hvalue ifNotExists(Runtime *runtime, const EventData *vevent) const;
 };
 

@@ -15,7 +15,7 @@
 #define __h3o_ActionNode__
 
 #include "FuncNode.hpp"
-#include "../../vm/ActionData.hpp"
+#include "../../vm/VM_Action.hpp"
 
 namespace hydro
 {
@@ -23,15 +23,15 @@ namespace hydro
 class ActionNode : public FuncNode
 {
 private:
-    ActionData *_vact;
+    VM_Action *_vact;
     std::string _contextName;
     
 public:
-    ActionNode(ActionData *vact, std::string contextName);
+    ActionNode(VM_Action *vact, std::string contextName);
     virtual ~ActionNode();
     virtual void build(Chunk *chunk) override;
     std::string contextName() const { return _contextName; }
-    ActionData *vact() const { return _vact; }
+    VM_Action *vact() const { return _vact; }
 };
 
 } // namespace hydro

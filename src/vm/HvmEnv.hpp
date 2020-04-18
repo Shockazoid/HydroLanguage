@@ -262,13 +262,13 @@ public:
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const FuncData *vfunc);
         
-        hvalue createAndBindIfNotExists(Runtime *runtime, const ActionData *vact);
+        hvalue createAndBindIfNotExists(Runtime *runtime, const VM_Action *vact);
         
         hvalue createAndBindIfNotExists(Runtime *runtime, const EventData *vevent);
         
         hfunction createFunction(const FuncData *vfunc);
         
-        haction createAction(const ActionData *vact);
+        haction createAction(const VM_Action *vact);
         
         hevent createEvent(const EventData *vevent);
         

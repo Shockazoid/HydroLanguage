@@ -16,9 +16,9 @@
 namespace hydro
 {
 
-HAction::HAction(HvmEnv *env, HClass *actionClass, const ActionData *vaction, HClass *ownerClass, HObject *instance, action_glue *glue) : HObject{env, actionClass}, RuntimeContext{ownerClass}, _vaction{vaction}, _thisObject{instance}, _glue{glue} {}
+HAction::HAction(HvmEnv *env, HClass *actionClass, const VM_Action *vaction, HClass *ownerClass, HObject *instance, action_glue *glue) : HObject{env, actionClass}, RuntimeContext{ownerClass}, _vaction{vaction}, _thisObject{instance}, _glue{glue} {}
 
-HAction::HAction(HvmEnv *env, HClass *actionClass, const ActionData *vaction, action_glue *glue) : HObject{env, actionClass}, RuntimeContext{}, _vaction{vaction}, _thisObject{nullptr}, _glue{glue} {}
+HAction::HAction(HvmEnv *env, HClass *actionClass, const VM_Action *vaction, action_glue *glue) : HObject{env, actionClass}, RuntimeContext{}, _vaction{vaction}, _thisObject{nullptr}, _glue{glue} {}
 
 HAction::~HAction() {}
 

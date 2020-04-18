@@ -1324,7 +1324,7 @@ void H3oAssembler::parseNext()
             }
         }
         
-        ActionData *act = new ActionData{};
+        VM_Action *act = new VM_Action{};
         act->chunk = _result;
         act->name = qname; // might be anonymous
         act->modifier = mod;

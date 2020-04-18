@@ -11,8 +11,8 @@
 //        © 2020 Shockazoid, Inc. All Rights Reserved.
 //
 
-#ifndef __h3o_ActionData__
-#define __h3o_ActionData__
+#ifndef __h3o_VM_Action__
+#define __h3o_VM_Action__
 
 #include "FuncData.hpp"
 #include "EventData.hpp"
@@ -20,11 +20,11 @@
 namespace hydro
 {
 
-struct ActionData : public FuncData
+struct VM_Action : public FuncData
 {
     const EventData *context;
 };
 
 } // namespace hydro
 
-#endif /* __h3o_ActionData__ */
+#endif /* __h3o_VM_Action__ */

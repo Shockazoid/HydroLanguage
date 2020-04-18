@@ -900,7 +900,7 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             i = bin.getInt(ip); // nargs
             a = opop(currentFrame);
             haction act = a.tryCast<HAction>();
-            const ActionData *vact = act ? act->_vaction : nullptr;
+            const VM_Action *vact = act ? act->_vaction : nullptr;
             std::map<std::string, hvalue> args;
             
             while (i-- > 0)
@@ -1225,9 +1225,9 @@ bool VM::cpu(HvmContext *cxt, Chunk *chunk, CallFrame *currentFrame, hvalue &res
             i = bin.getInt(ip);
             a = chunk->constPool[i];
             
-            if(a.type() == typeid(ActionData *))
+            if(a.type() == typeid(VM_Action *))
             {
-                ActionData *vact = a; // cast
+                VM_Action *vact = a; // cast
                 currentFrame->locals->define(vact, _env->createAction(vact));
             }
             else if(a.type() == typeid(FuncData *))
@@ -1781,7 +1781,7 @@ CallFrame *VM::prepVmCall(HvmContext *threadContext, RuntimeContext *callee, Clo
 CallFrame *VM::prepVmTrigger(HvmContext *threadContext, RuntimeContext *callee, Closure *closure, std::map<std::string, hvalue> &params, MemorySpace *scopeToUse, hvalue thisObject, bool useDynamicScope)
 {
     // will only be an action
-    const ActionData *data = dynamic_cast<const ActionData *>(closure->data);
+    const VM_Action *data = dynamic_cast<const VM_Action *>(closure->data);
     
     if (!data)
     {
@@ -2049,7 +2049,7 @@ bool VM::triggerHydroAction(HvmContext *threadContext, HAction *callingContext, 
     // perform critical procedures for vm call
     CallFrame *frame = prepVmTrigger(threadContext, callingContext, closure, args, nullptr, thisObject);
     
-    const ActionData *data = static_cast<const ActionData *>(closure->data);
+    const VM_Action *data = static_cast<const VM_Action *>(closure->data);
 
     // execute
     return cpu(threadContext, data->chunk, frame, result);

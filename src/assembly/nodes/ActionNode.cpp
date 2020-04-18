@@ -18,7 +18,7 @@
 namespace hydro
 {
 
-ActionNode::ActionNode(ActionData *vact, std::string contextName) : FuncNode{vact}, _vact{vact}, _contextName{contextName} {}
+ActionNode::ActionNode(VM_Action *vact, std::string contextName) : FuncNode{vact}, _vact{vact}, _contextName{contextName} {}
 
 ActionNode::~ActionNode() {}
 

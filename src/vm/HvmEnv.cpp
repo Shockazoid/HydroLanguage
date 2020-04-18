@@ -298,7 +298,7 @@ hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const FuncData *vfunc)
     return fn;
 }
 
-hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const ActionData *vact)
+hvalue HvmEnv::createAndBindIfNotExists(Runtime *runtime, const VM_Action *vact)
 {
     if(hvalue result = hvalue{runtime->find(vact->name)})
         return result;
@@ -353,7 +353,7 @@ hfunction HvmEnv::createFunction(const FuncData *vfunc)
     return new HFunction{this, _coreService->FunctionClass(), vfunc, glue};
 }
 
-haction HvmEnv::createAction(const ActionData *vact)
+haction HvmEnv::createAction(const VM_Action *vact)
 {
     // TODO if native load glue code
     action_glue *glue;
